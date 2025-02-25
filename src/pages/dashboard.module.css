@@ -1,0 +1,9 @@
+.variables {
+  --display-width: 1920px;
+  --display-height: 1080px;
+  --padding-y: 20px;
+  --padding-x: 12px;
+  --gap: 12px;
+  --sm-width: 303px;
+  --lg-width: 1265px;
+}

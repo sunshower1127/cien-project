@@ -5,7 +5,7 @@ export default function CafeteriaMenu() {
   const scrollContainerRef = useRef<HTMLUListElement>(null);
   return (
     <Card className="h-min w-(--sm-width)">
-      <ul className="hide-scroll-bar flex snap-x snap-mandatory flex-row overflow-x-scroll *:snap-start" ref={scrollContainerRef}>
+      <ul className="hide-scroll-bar flex snap-x snap-mandatory flex-row gap-[10px] overflow-x-scroll *:snap-start" ref={scrollContainerRef}>
         {Array.from({ length: 10 }).map(() => (
           <Page />
         ))}

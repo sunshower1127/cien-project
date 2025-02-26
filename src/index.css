@@ -68,14 +68,14 @@
 @layer utilities {
   /* 모든 브라우저에 적용할 기본 스타일 */
   .hide-scrollbar {
-    -ms-overflow-style: none; /* IE와 Edge */
-    scrollbar-width: none; /* Firefox */
-    overflow-y: scroll; /* 스크롤 기능은 유지 */
-  }
-
-  /* Webkit 기반 브라우저(Chrome, Safari, Opera)에 대한 스타일 */
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+    /* Safari and Chrome */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

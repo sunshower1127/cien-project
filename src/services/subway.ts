@@ -1,4 +1,4 @@
-const apiAddress = "https://api.cien.or.kr/api/opendata/getSubwayData";
+import { subwayApiURL } from "@/constants/url";
 
 interface Response {
   errorMessage: {
@@ -9,16 +9,14 @@ interface Response {
     developerMessage: string;
     total: number;
   };
-  realtimeArrivalList: [
-    {
-      updnLine: "하행" | "상행";
-      arvlMsg2: string;
-    },
-  ];
+  realtimeArrivalList: {
+    updnLine: "하행" | "상행";
+    arvlMsg2: string;
+  }[];
 }
 
 export async function fetchSubwayData() {
-  const resp = await fetch(apiAddress);
+  const resp = await fetch(subwayApiURL);
   if (resp.status === 200) {
     const { errorMessage, realtimeArrivalList } = (await resp.json()) as Response;
     if (errorMessage.status !== 200) {
@@ -38,6 +36,6 @@ export async function fetchSubwayData() {
   } else if (resp.status === 304) {
     return null;
   } else {
-    throw new Error(`상태코드: ${resp.status}`);
+    throw new Error(`${resp.status}: ${resp.statusText}`);
   }
 }

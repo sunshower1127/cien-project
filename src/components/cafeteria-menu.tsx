@@ -1,72 +1,84 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { cafeteriaMealUpdateRate, cafetriaMealSlideRate } from "@/constants/time";
+import { fetchCafeteriaMeal } from "@/services/cafeteria-meal";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 
+type CafeteriaMealType = Awaited<ReturnType<typeof fetchCafeteriaMeal>>;
+
 export default function CafeteriaMenu() {
-  const scrollContainerRef = useRef<HTMLUListElement>(null);
+  const [data, setData] = useState<CafeteriaMealType>();
+  const [page, setPage] = useState(0);
+  const pageLength = data?.length || 0;
+
+  const listRef = useRef<HTMLUListElement>(null);
+
+  // fetch and update
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resp = await fetchCafeteriaMeal();
+        if (resp) {
+          setData(resp);
+          setPage(0);
+          console.log("식당 메뉴 새로고침 완료");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchData();
+
+    const cafeteriaMealInterval = setInterval(fetchData, cafeteriaMealUpdateRate);
+
+    return () => clearInterval(cafeteriaMealInterval);
+  }, []);
+
+  // page slide
+  useEffect(() => {
+    if (!listRef?.current?.children) return;
+    const items = listRef.current.children;
+
+    const pageSlideTimeout = setTimeout(() => {
+      let newPage = page + 1;
+      if (newPage === pageLength) {
+        newPage = 0;
+      }
+      items[newPage].scrollIntoView({ behavior: "smooth", inline: "start" });
+      setPage(newPage);
+      console.log("식당 메뉴 다음으로 넘김");
+    }, cafetriaMealSlideRate);
+
+    return () => clearTimeout(pageSlideTimeout);
+  }, [page, pageLength]);
+
   return (
     <Card className="h-min w-(--sm-width)">
-      <ul className="hide-scrollbar flex snap-x snap-mandatory flex-row gap-[10px] overflow-x-scroll *:snap-start" ref={scrollContainerRef}>
-        {Array.from({ length: 10 }).map(() => (
-          <Page />
-        ))}
+      <ul className="flex flex-row gap-[10px] overflow-x-hidden" ref={listRef}>
+        {data?.map((item, index) => <Page key={index} item={item} />)}
       </ul>
       <CardFooter>
-        <PageIndicator scrollContainerRef={scrollContainerRef} />
+        <div className="title-md w-full text-center">
+          {page + 1}/{pageLength}
+        </div>
       </CardFooter>
     </Card>
   );
 }
 
-function PageIndicator({ scrollContainerRef }: { scrollContainerRef: RefObject<HTMLUListElement | null> }) {
-  const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(0);
-  useEffect(() => {
-    if (!scrollContainerRef || !scrollContainerRef.current) return;
-    const scrollContainer = scrollContainerRef.current;
-
-    setMaxPage(scrollContainer.childElementCount);
-
-    // 스크롤 이벤트 감지
-    const handleScroll = () => {
-      // 컨테이너의 스크롤 위치
-      const scrollLeft = scrollContainer.scrollLeft;
-      const containerWidth = scrollContainer.clientWidth;
-
-      // 현재 보이는 아이템의 인덱스 계산 (가로 스크롤 기준)
-      const currentIndex = Math.round(scrollLeft / containerWidth);
-
-      setPage(currentIndex + 1);
-    };
-    scrollContainer.addEventListener("scroll", handleScroll);
-
-    return () => scrollContainer.removeEventListener("scroll", handleScroll);
-  }, [scrollContainerRef]);
-
-  return (
-    <div className="title-md w-full text-center">
-      {page}/{maxPage}
-    </div>
-  );
-}
-
-function Page() {
+function Page({ item }: { item: CafeteriaMealType[number] }) {
   return (
     <li className="flex w-full flex-col gap-[20px]">
       <CardHeader className="flex flex-row justify-between">
-        <h6 className="title-md">중식</h6>
-        <span className="action-sm">운영시간 11:00~13:00</span>
+        <h6 className="title-md">{item.type}</h6>
+        <span className="action-sm">{item.operatingHours}</span>
       </CardHeader>
-      <CardTitle className="title-lg truncate">참슬기 식당</CardTitle>
+      <CardTitle className="title-lg truncate">{item.cafeteria}</CardTitle>
       <CardContent>
         <ul className="action-md flex flex-col gap-[8px] *:truncate">
-          <li>김가루후리가케밥</li>
-          <li>두부미소된장국</li>
-          <li>튀긴꼬치어묵&칠리소스</li>
-          <li>매콤떡볶이</li>
-          <li>무순단무지무침</li>
-          <li>발렌타인초코베이비슈</li>
-          <li>그린야채샐러드/소스</li>
-          <li>배추김치</li>
+          {item.menu.map((menu) => (
+            <li key={menu}>{menu}</li>
+          ))}
         </ul>
       </CardContent>
     </li>

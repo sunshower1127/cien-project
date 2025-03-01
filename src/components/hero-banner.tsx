@@ -18,7 +18,6 @@ export default function HeroBanner() {
         if (resp) {
           setData(resp);
           setPage(0);
-          console.log("배너 이미지 새로고침 완료");
         }
       } catch (e) {
         console.error(e);
@@ -48,8 +47,6 @@ export default function HeroBanner() {
     } else {
       nextPageTimeout = setTimeout(() => setPage((prev) => (prev === contentLength - 1 ? 0 : prev + 1)), heroBannerImageSlideRate);
     }
-
-    console.log("배너 이미지 다음으로 넘김");
 
     return () => {
       if (nextPageTimeout) clearTimeout(nextPageTimeout);

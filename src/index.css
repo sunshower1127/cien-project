@@ -26,6 +26,9 @@
     --cien-neon-blue-500: #0088fe;
     --cien-neon-blue-700: #01abfe;
     --cien-neon-blue-900: #00dfff;
+
+    --color-black: var(--cien-black);
+    --color-white: var(--cien-white);
   }
 
   .title-lg {
@@ -80,8 +83,8 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
+  --background: var(--cien-white);
+  --foreground: var(var(--cien-black));
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);

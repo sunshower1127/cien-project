@@ -38,3 +38,17 @@ export async function fetchAirPollution() {
     throw new Error(`${resp.status}: ${resp.statusText}`);
   }
 }
+
+export function getPM10Color(pm10: number) {
+  if (pm10 <= 30) return "var(--cien-blue-500)";
+  if (pm10 <= 80) return "var(--cien-neon-blue-100)";
+  if (pm10 <= 150) return "var(--cien-red)";
+  return "var(--cien-black)";
+}
+
+export function getPM25Color(pm25: number) {
+  if (pm25 <= 15) return "var(--cien-blue-500)";
+  if (pm25 <= 50) return "var(--cien-neon-blue-100)";
+  if (pm25 <= 100) return "var(--cien-red)";
+  return "var(--cien-black)";
+}

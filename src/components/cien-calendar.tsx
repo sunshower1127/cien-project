@@ -19,7 +19,6 @@ export default function CienCalendar() {
       // if (iframeRef.current && iframeRef.current.contentWindow) {
       //   iframeRef.current.contentWindow.location.reload();
       // }
-      console.log("달력 새로고침");
     }, calendarUpdateRate);
 
     return () => clearInterval(intervalId);

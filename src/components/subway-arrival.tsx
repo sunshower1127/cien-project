@@ -15,7 +15,6 @@ export default function SubwayArrival() {
         if (resp) {
           setDownlineMsgs(resp.하행);
           setUplineMsgs(resp.상행);
-          console.log("열차 시간 새로고침");
         }
       } catch (e) {
         console.error(e);

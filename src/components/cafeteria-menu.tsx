@@ -20,7 +20,6 @@ export default function CafeteriaMenu() {
         if (resp) {
           setData(resp);
           setPage(0);
-          console.log("식당 메뉴 새로고침 완료");
         }
       } catch (e) {
         console.error(e);
@@ -45,8 +44,10 @@ export default function CafeteriaMenu() {
         newPage = 0;
       }
       items[newPage].scrollIntoView({ behavior: "smooth", inline: "start" });
+
+      listRef!.current!.style.height = `${items[newPage].clientHeight}px`;
+
       setPage(newPage);
-      console.log("식당 메뉴 다음으로 넘김");
     }, cafetriaMealSlideRate);
 
     return () => clearTimeout(pageSlideTimeout);
@@ -54,7 +55,7 @@ export default function CafeteriaMenu() {
 
   return (
     <Card className="h-min w-(--sm-width)">
-      <ul className="flex flex-row gap-[10px] overflow-x-hidden" ref={listRef}>
+      <ul className="flex flex-row gap-[10px] overflow-hidden transition-[height] duration-300" ref={listRef}>
         {data?.map((item, index) => <Page key={index} item={item} />)}
       </ul>
       <CardFooter>
@@ -68,7 +69,7 @@ export default function CafeteriaMenu() {
 
 function Page({ item }: { item: CafeteriaMealType[number] }) {
   return (
-    <li className="flex w-full flex-col gap-[20px]">
+    <li className="flex h-min w-full flex-col gap-[20px]">
       <CardHeader className="flex flex-row justify-between">
         <h6 className="title-md">{item.type}</h6>
         <span className="action-sm">{item.operatingHours}</span>

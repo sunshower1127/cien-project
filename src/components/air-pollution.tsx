@@ -1,5 +1,5 @@
 import { airPollutionUpdateRate } from "@/constants/time";
-import { fetchAirPollution } from "@/services/air-pollution";
+import { fetchAirPollution, getPM10Color, getPM25Color } from "@/services/air-pollution";
 import { useEffect, useState } from "react";
 import { Card, CardTitle } from "./ui/card";
 import Label from "./ui/label";
@@ -13,7 +13,6 @@ export default function AirPollution() {
         const resp = await fetchAirPollution();
         if (resp) {
           setData(resp);
-          console.log("미세먼지 정보 새로고침");
         }
       } catch (e) {
         console.error(e);
@@ -32,8 +31,12 @@ export default function AirPollution() {
   if (data) {
     Content = () => (
       <>
-        <Label>미세먼지 : {data.pm10} ㎍/㎥</Label>
-        <Label className="bg-(--cien-red)">초미세먼지 : {data.pm25} ㎍/㎥</Label>
+        <Label className="pl-[16px]" style={{ backgroundColor: getPM10Color(data.pm10) }}>
+          미세먼지 : {data.pm10} ㎍/㎥
+        </Label>
+        <Label className="" style={{ backgroundColor: getPM25Color(data.pm25) }}>
+          초미세먼지 : {data.pm25} ㎍/㎥
+        </Label>
       </>
     );
   }

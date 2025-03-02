@@ -1,90 +1,15 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
-@import "tailwindcss";
-
-@plugin "tailwindcss-animate";
-
-@custom-variant dark (&:is(.dark *));
-
 @layer base {
-  :root {
-    --font-sans: "Pretendard Variable";
-    --cien-black: #101010;
-    --cien-white: #f0f0f0;
-    --cien-red: #f74d5d;
-    --cien-gray-100: #202020;
-    --cien-gray-300: #404040;
-    --cien-gray-500: #707070;
-    --cien-gray-700: #a0a0a0;
-    --cien-gray-900: #efefef;
-    --cien-blue-100: #1d466c;
-    --cien-blue-300: #326eae;
-    --cien-blue-500: #5e90c7;
-    --cien-blue-700: #92b5db;
-    --cien-blue-900: #b7d5f4;
-    --cien-neon-blue-100: #8a5dfe;
-    --cien-neon-blue-300: #2c74fe;
-    --cien-neon-blue-500: #0088fe;
-    --cien-neon-blue-700: #01abfe;
-    --cien-neon-blue-900: #00dfff;
-
-    --color-black: var(--cien-black);
-    --color-white: var(--cien-white);
-  }
-
-  .title-lg {
-    @apply text-[32px] font-bold;
-  }
-
-  .title-md {
-    @apply text-[20px] font-bold;
-  }
-
-  .title-sm {
-    @apply text-[16px] font-bold;
-  }
-
-  .body-md {
-    @apply text-[12px] font-medium;
-  }
-
-  .action-md {
-    @apply text-[20px] font-medium;
-  }
-
-  .action-sm {
-    @apply text-[16px] font-medium;
-  }
-
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
-
-  .flex > *,
-  .inline-flex > * {
-    @apply flex-none;
-  }
-}
-
-@layer utilities {
-  /* 모든 브라우저에 적용할 기본 스타일 */
-  .hide-scrollbar {
-    /* IE and Edge */
-    -ms-overflow-style: none;
-    /* Firefox */
-    scrollbar-width: none;
-    /* Safari and Chrome */
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
 }
 
 :root {
   --background: var(--cien-white);
-  --foreground: var(var(--cien-black));
+  --foreground: var(--cien-black);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);

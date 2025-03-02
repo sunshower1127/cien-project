@@ -1,0 +1,70 @@
+:root {
+  --cien-black: #101010;
+  --cien-white: #f0f0f0;
+  --cien-red: #f74d5d;
+  --cien-gray-100: #202020;
+  --cien-gray-300: #404040;
+  --cien-gray-500: #707070;
+  --cien-gray-700: #a0a0a0;
+  --cien-gray-900: #efefef;
+  --cien-blue-100: #1d466c;
+  --cien-blue-300: #326eae;
+  --cien-blue-500: #5e90c7;
+  --cien-blue-700: #92b5db;
+  --cien-blue-900: #b7d5f4;
+  --cien-neon-blue-100: #8a5dfe;
+  --cien-neon-blue-300: #2c74fe;
+  --cien-neon-blue-500: #0088fe;
+  --cien-neon-blue-700: #01abfe;
+  --cien-neon-blue-900: #00dfff;
+}
+
+@theme {
+  --font-sans: "Pretendard Variable";
+  --color-black: var(--cien-black);
+  --color-white: var(--cien-white);
+  --color-cien-black: #101010;
+  --color-cien-white: #f0f0f0;
+  --color-cien-red: #f74d5d;
+  --color-cien-gray-100: #202020;
+  --color-cien-gray-300: #404040;
+  --color-cien-gray-500: #707070;
+  --color-cien-gray-700: #a0a0a0;
+  --color-cien-gray-900: #efefef;
+  --color-cien-blue-100: #1d466c;
+  --color-cien-blue-300: #326eae;
+  --color-cien-blue-500: #5e90c7;
+  --color-cien-blue-700: #92b5db;
+  --color-cien-blue-900: #b7d5f4;
+  --color-cien-neon-blue-100: #8a5dfe;
+  --color-cien-neon-blue-300: #2c74fe;
+  --color-cien-neon-blue-500: #0088fe;
+  --color-cien-neon-blue-700: #01abfe;
+  --color-cien-neon-blue-900: #00dfff;
+}
+
+@layer utilities {
+  .title-lg {
+    @apply text-[32px] font-bold;
+  }
+
+  .title-md {
+    @apply text-[20px] font-bold;
+  }
+
+  .title-sm {
+    @apply text-[16px] font-bold;
+  }
+
+  .body-md {
+    @apply text-[12px] font-medium;
+  }
+
+  .action-md {
+    @apply text-[20px] font-medium;
+  }
+
+  .action-sm {
+    @apply text-[16px] font-medium;
+  }
+}

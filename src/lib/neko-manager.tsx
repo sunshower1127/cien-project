@@ -1,10 +1,15 @@
 import { peopleCountUpdateRate } from "@/constants/time";
 import { fetchCountOfStudentsInClubRoom } from "@/services/cctv-api";
-import { useEffect } from "react";
+import { safeRandom } from "@/utils/random";
+import { repeatFn } from "@/utils/utils";
 
-export default function NekoEngine() {
+import { useEffect, useRef } from "react";
+
+export default function NekoManager() {
+  const nekoContainer = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setNekoContainer("neko");
+    if (!nekoContainer.current) return;
+    setNekoContainer(nekoContainer.current);
     setNekoSpeed(1.0);
     setNekoSize(2.0);
 
@@ -14,16 +19,13 @@ export default function NekoEngine() {
         if (peopleCnt === null) return;
 
         const nekoCnt = getNekoLength();
+
         if (peopleCnt > nekoCnt) {
-          Array.from({ length: peopleCnt - nekoCnt }).forEach(() => {
-            setTimeout(() => {
-              const randomNeko = nekoCandidate[Math.floor(Math.random() * nekoCandidate.length)];
-              addNeko(randomNeko);
-            }, Math.random() * 0.01);
-            // addNeko();
+          safeRandom({ n: peopleCnt - nekoCnt, max: nekoSelections.length - 1 }).forEach((randomIndex) => {
+            addNeko(nekoSelections[randomIndex]);
           });
         } else if (peopleCnt < nekoCnt) {
-          Array.from({ length: nekoCnt - peopleCnt }).forEach(() => removeNeko());
+          repeatFn(() => removeNeko(), nekoCnt - peopleCnt);
         }
       } catch (e) {
         console.error(e);
@@ -32,12 +34,10 @@ export default function NekoEngine() {
 
     return () => {
       clearInterval(nekoInterval);
-      Array.from({ length: getNekoLength() }).forEach(() => {
-        removeNeko();
-      });
+      repeatFn(() => removeNeko(), getNekoLength());
     };
   }, []);
-  return <></>;
+  return <div aria-label="neko-container" ref={nekoContainer}></div>;
 }
 
 /* https://webneko.net/
@@ -45,7 +45,23 @@ export default function NekoEngine() {
  */
 
 // 아래 배열에 있는 애들중에서 랜덤으로 하나 뽑아서 생성
-const nekoCandidate: NekoType[] = ["white", "black", "calico", "peach", "spirit", "silversky", "lucky", "rose", "blue", "ace", "marmalade", "socks", "jess", "lucy", "fancy"];
+const nekoSelections: NekoType[] = [
+  "white",
+  "black",
+  "calico",
+  "peach",
+  "spirit",
+  "silversky",
+  "lucky",
+  "rose",
+  "blue",
+  "ace",
+  "marmalade",
+  "socks",
+  "jess",
+  "lucy",
+  "fancy",
+];
 
 type NekoType =
   | "white"
@@ -92,6 +108,6 @@ type NekoType =
 declare function addNeko(nekoType?: NekoType): void;
 declare function removeNeko(): void;
 declare function getNekoLength(): number;
-declare function setNekoContainer(elementId: string): void;
+declare function setNekoContainer(element: string | HTMLElement): void;
 declare function setNekoSpeed(speed: number): void;
 declare function setNekoSize(ratio: number): void;

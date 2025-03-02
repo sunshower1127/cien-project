@@ -1,8 +1,8 @@
 import { heroBannerImageSlideRate, heroBannerUpdateRate } from "@/constants/time";
+import { heroBannerDefaultImageURL } from "@/constants/url";
 import { fetchHeroBannerItems } from "@/services/hero-banner";
 import { useEffect, useRef, useState } from "react";
 import { Card } from "./ui/card";
-import { heroBannerDefaultImageURL } from "@/constants/url";
 
 export default function HeroBanner() {
   const [data, setData] = useState<Awaited<ReturnType<typeof fetchHeroBannerItems>>>();

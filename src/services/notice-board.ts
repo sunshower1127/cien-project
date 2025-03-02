@@ -1,4 +1,5 @@
 import { noticeBoardApiURL } from "@/constants/url";
+import { fetchWithStatusHandling } from "@/utils/utils";
 
 type Response = {
   id: number;
@@ -6,15 +7,8 @@ type Response = {
   date: string;
 }[];
 
-export async function fetchNoticeBoard() {
-  const resp = await fetch(noticeBoardApiURL);
-  if (resp.status === 200) {
-    const data = (await resp.json()) as Response;
+export const fetchNoticeBoard = async () =>
+  fetchWithStatusHandling(noticeBoardApiURL, (data: Response) => {
     data.sort((a, b) => a.id - b.id);
     return data.slice(0, 3).map(({ notice, date }) => `${date} ${notice}`);
-  } else if (resp.status === 304) {
-    return null;
-  } else {
-    throw new Error(`${resp.status}: ${resp.statusText}`);
-  }
-}
+  });

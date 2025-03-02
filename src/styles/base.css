@@ -1,0 +1,8 @@
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  .flex > *,
+  .inline-flex > * {
+    @apply flex-none;
+  }
+}

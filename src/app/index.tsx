@@ -1,12 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import NekoEngine from "./lib/neko-engine";
-import Dashboard from "./pages/dashboard";
+import NekoManager from "@/lib/neko-manager";
+import Dashboard from "@/page/dashboard";
 
 createRoot(document.getElementById("root")!).render(
   <>
-    <NekoEngine />
+    <NekoManager />
     <StrictMode>
       <Dashboard />
     </StrictMode>

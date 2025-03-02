@@ -7,16 +7,7 @@ interface Response {
   }[];
 }
 
-export async function fetchCafeteriaMeal() {
-  //   const resp = await fetch(apiURL);
-  //   if (resp.status === 200) {
-  //     const {data} = await resp.json() as Response
-  //     return data;
-  //   } else if (resp.status === 304) {
-  //     return null;
-  //   } else {
-  //     throw new Error(`${resp.status}: ${resp.statusText}`);
-  //   //   }
+export const fetchCafeteriaMeal = async () => {
   // dummy for test
   const { data }: Response = {
     data: [
@@ -53,4 +44,4 @@ export async function fetchCafeteriaMeal() {
     ],
   };
   return data;
-}
+};

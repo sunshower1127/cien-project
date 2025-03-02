@@ -29,7 +29,9 @@ export default function NoticeBoard() {
         최근 공지사항
         <span className="title-sm pl-[20px]">공지사항 세부내용 확인을 위해서는 디스코드 알림-공지 채널을 확인해주세요</span>
       </CardTitle>
-      <ul className="gap-12px title-lg flex flex-col px-[24px] *:truncate">{data?.map((content) => <li key={content}>{content}</li>) ?? <li>공지사항 정보가 없습니다</li>}</ul>
+      <ul className="gap-12px title-lg flex flex-col px-[24px] *:truncate">
+        {data?.map((content) => <li key={content}>{content}</li>) ?? <li>공지사항 정보가 없습니다</li>}
+      </ul>
     </Card>
   );
 }

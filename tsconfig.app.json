@@ -21,6 +21,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
+    /* Decorator */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     /* Path Alias */
     "baseUrl": ".",
     "paths": {

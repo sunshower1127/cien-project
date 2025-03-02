@@ -53,7 +53,7 @@ function cE(i) {
     ? ((d.layers[i] = new Layer(0)), eval("document." + i + "=d.layers[i]"))
     : void 0 !== d.createElement &&
       ((X = "<div id='" + i + '\' style="position:absolute">&nbsp;</div>'),
-      (Y = d.createElement("DIV")),
+      (Y = false) /*d.createElement("DIV")*/,
       Y ? ((Y.innerHTML = X), d.body.appendChild(Y)) : void 0 !== d.body.insertAdjacentHTML && d.body.insertAdjacentHTML("BeforeEnd", X));
 }
 function byName(e, t) {
@@ -379,7 +379,7 @@ function boxCheckBoard(e, t, i) {
     r = 0;
   return a.boardX == o && a.boardY == s && (r = 1), checkerboard[o][s] - r;
 }
-(d = document), (l = d.layers), (op = -1 != navigator.userAgent.indexOf("Opera")), (px = "px"), document.write('<style type="text/css">#nl{display:none;}</style>');
+(d = document), (l = d.layers), (op = -1 != navigator.userAgent.indexOf("Opera")), (px = "px") /*, document.write('<style type="text/css">#nl{display:none;}</style>')*/;
 document.write('<style type="text/css">[id^="layerNeko"] img { image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges; }</style>');
 var checkerboardEccentricity = 10,
   checkerboardScale = 20,

@@ -1,4 +1,5 @@
 import { subwayApiURL } from "@/constants/url";
+import { fetchWithStatusHandling } from "@/utils/utils";
 
 interface Response {
   errorMessage: {
@@ -15,12 +16,10 @@ interface Response {
   }[];
 }
 
-export async function fetchSubwayData() {
-  const resp = await fetch(subwayApiURL);
-  if (resp.status === 200) {
-    const { errorMessage, realtimeArrivalList } = (await resp.json()) as Response;
+export const fetchSubwayData = async () =>
+  fetchWithStatusHandling(subwayApiURL, ({ errorMessage, realtimeArrivalList }: Response) => {
     if (errorMessage.status !== 200) {
-      throw errorMessage;
+      throw new Error(JSON.stringify(errorMessage, null, 2));
     }
     if (errorMessage.total !== realtimeArrivalList.length) {
       throw new Error(`기대한 데이터 개수: ${errorMessage.total}, 실제 데이터 개수: ${realtimeArrivalList.length}`);
@@ -33,9 +32,4 @@ export async function fetchSubwayData() {
     });
 
     return result;
-  } else if (resp.status === 304) {
-    return null;
-  } else {
-    throw new Error(`${resp.status}: ${resp.statusText}`);
-  }
-}
+  });

@@ -1,4 +1,5 @@
 import { airPollutionApiURL } from "@/constants/url";
+import { fetchWithStatusHandling } from "@/utils/utils";
 
 interface Response {
   RealtimeCityAir: {
@@ -15,13 +16,8 @@ interface Response {
   };
 }
 
-export async function fetchAirPollution() {
-  const resp = await fetch(airPollutionApiURL);
-  if (resp.status === 200) {
-    const {
-      RealtimeCityAir: { RESULT: msg, row },
-    } = (await resp.json()) as Response;
-
+export const fetchAirPollution = () =>
+  fetchWithStatusHandling(airPollutionApiURL, ({ RealtimeCityAir: { RESULT: msg, row } }: Response) => {
     if (msg.CODE !== "INFO-000") {
       throw new Error(`${msg.CODE}: ${msg.MESSAGE}`);
     }
@@ -32,12 +28,7 @@ export async function fetchAirPollution() {
     }
 
     return null;
-  } else if (resp.status === 304) {
-    return null;
-  } else {
-    throw new Error(`${resp.status}: ${resp.statusText}`);
-  }
-}
+  });
 
 export function getPM10Color(pm10: number) {
   if (pm10 <= 30) return "var(--cien-blue-500)";

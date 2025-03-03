@@ -3,23 +3,21 @@ import { heroBannerDefaultImageURL } from "@/constants/url";
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { fetchHeroBannerItems } from "@/services/hero-banner";
 import { useCallback } from "react";
-import AutoScrollSlider, { onSlideArgs } from "./auto-scroll-slider";
+import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
 export default function HeroBanner() {
   const data = useAutoUpdate(heroBannerUpdateRate, fetchHeroBannerItems);
 
   const handleSlide = useCallback(
-    ({ prevElement, element, index }: onSlideArgs) => {
+    ({ prevElement, element, index }: onSlideProps) => {
       if (prevElement instanceof HTMLVideoElement) {
         prevElement.pause();
         prevElement.currentTime = 0;
-        console.log("prevElement pause");
       }
 
       if (element instanceof HTMLVideoElement) {
         element.play();
-        console.log("element play");
       }
 
       if (data && data.length > index && data[index].duration) {

@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { HTMLProps } from "@/types/html";
+import { cn } from "@/utils/utils";
 import { cva, VariantProps } from "class-variance-authority";
 
 const cardVariants = cva("flex flex-col gap-[16px] rounded-[20px] p-[20px] overflow-hidden", {
@@ -60,7 +60,7 @@ function Label({ className, children, ...props }: HTMLProps<"div">) {
   );
 }
 
-// 복합 컴포넌트 구성
+// Composite Component
 const Card = Object.assign(Container, {
   Title,
   SubTitle,

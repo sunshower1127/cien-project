@@ -30,24 +30,24 @@
   --font-sans: "Pretendard Variable";
   --color-black: var(--cien-black);
   --color-white: var(--cien-white);
-  --color-cien-black: #101010;
-  --color-cien-white: #f0f0f0;
-  --color-cien-red: #f74d5d;
-  --color-cien-gray-100: #202020;
-  --color-cien-gray-300: #404040;
-  --color-cien-gray-500: #707070;
-  --color-cien-gray-700: #a0a0a0;
-  --color-cien-gray-900: #efefef;
-  --color-cien-blue-100: #1d466c;
-  --color-cien-blue-300: #326eae;
-  --color-cien-blue-500: #5e90c7;
-  --color-cien-blue-700: #92b5db;
-  --color-cien-blue-900: #b7d5f4;
-  --color-cien-neon-blue-100: #8a5dfe;
-  --color-cien-neon-blue-300: #2c74fe;
-  --color-cien-neon-blue-500: #0088fe;
-  --color-cien-neon-blue-700: #01abfe;
-  --color-cien-neon-blue-900: #00dfff;
+  --color-cien-black: var(--cien-black);
+  --color-cien-white: var(--cien-white);
+  --color-cien-red: var(--cien-red);
+  --color-cien-gray-100: var(--cien-gray-100);
+  --color-cien-gray-300: var(--cien-gray-300);
+  --color-cien-gray-500: var(--cien-gray-500);
+  --color-cien-gray-700: var(--cien-gray-700);
+  --color-cien-gray-900: var(--cien-gray-900);
+  --color-cien-blue-100: var(--cien-blue-100);
+  --color-cien-blue-300: var(--cien-blue-300);
+  --color-cien-blue-500: var(--cien-blue-500);
+  --color-cien-blue-700: var(--cien-blue-700);
+  --color-cien-blue-900: var(--cien-blue-900);
+  --color-cien-neon-blue-100: var(--cien-neon-blue-100);
+  --color-cien-neon-blue-300: var(--cien-neon-blue-300);
+  --color-cien-neon-blue-500: var(--cien-neon-blue-500);
+  --color-cien-neon-blue-700: var(--cien-neon-blue-700);
+  --color-cien-neon-blue-900: var(--cien-neon-blue-900);
 }
 
 @layer utilities {

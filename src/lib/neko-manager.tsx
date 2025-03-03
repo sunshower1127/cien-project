@@ -4,7 +4,6 @@ import { fetchCountOfStudentsInClubRoom } from "@/services/cctv-api";
 import { fetchNekoWeights } from "@/services/neko-weights";
 import { weightedRandom } from "@/utils/random";
 import { isNullish, repeatFn } from "@/utils/utils";
-
 import { useEffect, useRef } from "react";
 
 export default function NekoManager() {
@@ -26,7 +25,7 @@ export default function NekoManager() {
       if (peopleCnt > nekoCnt) {
         addRandomNekos(peopleCnt - nekoCnt);
       } else if (peopleCnt < nekoCnt) {
-        repeatFn(() => removeNeko(), nekoCnt - peopleCnt);
+        repeatFn(nekoCnt - peopleCnt, removeNeko);
       }
     }
   }, [peopleCnt]);
@@ -45,10 +44,7 @@ async function addRandomNekos(count: number) {
   }
 }
 
-/* https://webneko.net/
-소스코드 가져다 수정시켜서 사용함
- */
-
+// https://webneko.net/ 참고
 export type NekoType =
   | "white"
   | "black"

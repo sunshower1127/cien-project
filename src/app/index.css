@@ -4,7 +4,4 @@
 
 @import "@/styles/base.css";
 @import "@/styles/figma.css";
-@import "@/styles/shadcn.css";
 @import "@/styles/utils.css";
-
-@plugin "tailwindcss-animate";

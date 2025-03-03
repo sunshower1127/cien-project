@@ -1,5 +1,5 @@
 import { cafeterialMealApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/utils";
+import { fetchWithStatusHandling } from "@/utils/api";
 
 type Response = {
   cafeteria: string;

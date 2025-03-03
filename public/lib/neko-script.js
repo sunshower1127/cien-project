@@ -1,3 +1,7 @@
+// https://webneko.net/
+// 소스코드 가져와서 수정시켜 사용함
+// 오래된 코드라 그런가 해석 전혀 못하겠음
+
 // NEKO FOR JAVASCRIPT
 // THIS SCRIPT CODE IS (C) 2004 GREGORY BELL, ALL RIGHTS RESERVED.
 // ANYONE IS GRANTED THE RIGHT TO EXECUTE THIS PROGRAM BY LINKING TO IT
@@ -165,7 +169,9 @@ function Neko(x, y, active, imagedirectory) {
     this.doc || (this.doc = document),
     (this.image = byName(this.doc.images, strImage)),
     (this.image.Neko = this),
-    window.delay && window.delay > 0 ? (this.delay = window.delay + Math.floor(nDelayVariance * Math.random() - 5)) : (this.delay = 250 + Math.floor(nDelayVariance * Math.random() - 5)),
+    window.delay && window.delay > 0
+      ? (this.delay = window.delay + Math.floor(nDelayVariance * Math.random() - 5))
+      : (this.delay = 250 + Math.floor(nDelayVariance * Math.random() - 5)),
     (this.delayMultiplier = 1),
     // 스텝 사이즈를 적당하게 조정 (24 -> 18)
     window.stepsize && window.stepsize > 0 ? (this.stepsize = window.stepsize) : (this.stepsize = 18),

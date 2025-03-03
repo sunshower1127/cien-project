@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import { HTMLProps } from "@/types/html";
+import { cn } from "@/utils/utils";
 import { useEffect, useRef, useState } from "react";
 
-export interface onSlideArgs {
+export interface onSlideProps {
   prevIndex: number;
   prevElement: Element;
   index: number;
@@ -16,7 +16,7 @@ export default function AutoScrollSlider({
   children,
   ...props
 }: HTMLProps<"section"> & {
-  onSlide: ({ prevIndex, prevElement, index, element, container }: onSlideArgs) => number;
+  onSlide: ({ prevIndex, prevElement, index, element, container }: onSlideProps) => number;
 }) {
   const [index, setIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);

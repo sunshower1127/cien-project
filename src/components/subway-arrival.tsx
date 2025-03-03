@@ -1,10 +1,8 @@
 import { subwayArrivalUpdateRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
-import { fetchSubwayData } from "@/services/subway";
-import { isNullish } from "@/utils/utils";
+import { fetchSubwayData } from "@/services/subway-arrival";
 import Card from "./ui/card";
 
-// TODO: 시간 감소 기능?
 export default function SubwayArrival() {
   const data = useAutoUpdate(subwayArrivalUpdateRate, fetchSubwayData);
 
@@ -18,7 +16,7 @@ export default function SubwayArrival() {
 }
 
 function Info({ title, msgs }: { title: string; msgs?: string[] }) {
-  if (isNullish(msgs))
+  if (!msgs)
     return (
       <Card.Section className="items-center">
         <Card.Label>현재 열차 정보가 없습니다</Card.Label>

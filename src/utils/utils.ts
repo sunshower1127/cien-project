@@ -17,3 +17,8 @@ export async function fetchWithStatusHandling<ReturnType>(url: string, onSuccess
     throw new Error(`${resp.status}: ${resp.statusText}`);
   }
 }
+
+// TODO: 타입 가드에 대해서 더 공부해야 할듯
+export function isNullish<T>(value: T): value is T & (null | undefined) {
+  return value === null || value === undefined;
+}

@@ -30,15 +30,15 @@ export const fetchAirPollution = () =>
     return null;
   });
 
-export function getPM10Color(pm10: number) {
-  if (pm10 <= 30) return "var(--cien-blue-500)";
+export function getPM10Color(pm10: number = 0) {
+  if (pm10 <= 30) return "var(--cien-neon-blue-500)";
   if (pm10 <= 80) return "var(--cien-neon-blue-100)";
   if (pm10 <= 150) return "var(--cien-red)";
   return "var(--cien-black)";
 }
 
-export function getPM25Color(pm25: number) {
-  if (pm25 <= 15) return "var(--cien-blue-500)";
+export function getPM25Color(pm25: number = 0) {
+  if (pm25 <= 15) return "var(--cien-neon-blue-500)";
   if (pm25 <= 50) return "var(--cien-neon-blue-100)";
   if (pm25 <= 100) return "var(--cien-red)";
   return "var(--cien-black)";

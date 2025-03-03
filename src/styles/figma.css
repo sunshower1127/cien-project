@@ -1,4 +1,11 @@
 :root {
+  --display-width: 1920px;
+  --display-height: 1080px;
+
+  --sm-card-width: 303px;
+  --lg-card-width: 1265px;
+  --card-gap: 12px;
+
   --cien-black: #101010;
   --cien-white: #f0f0f0;
   --cien-red: #f74d5d;
@@ -19,7 +26,7 @@
   --cien-neon-blue-900: #00dfff;
 }
 
-@theme {
+@theme inline {
   --font-sans: "Pretendard Variable";
   --color-black: var(--cien-black);
   --color-white: var(--cien-white);

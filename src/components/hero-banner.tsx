@@ -7,7 +7,7 @@ import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
 export default function HeroBanner() {
-  const data = useAutoUpdate(heroBannerUpdateRate, fetchHeroBannerItems);
+  const data = useAutoUpdate(fetchHeroBannerItems, { intervalMs: heroBannerUpdateRate });
 
   const handleSlide = useCallback(
     ({ prevElement, element, index }: onSlideProps) => {

@@ -1,4 +1,4 @@
-import { cafeteriaMealUpdateRate, cafetriaMealSlideRate } from "@/constants/time";
+import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { fetchCafeteriaMeal } from "@/services/cafeteria-meal";
 import { useCallback, useState } from "react";
@@ -6,7 +6,7 @@ import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
 export default function CafeteriaMeal() {
-  const data = useAutoUpdate(cafeteriaMealUpdateRate, fetchCafeteriaMeal);
+  const data = useAutoUpdate(fetchCafeteriaMeal, { scheduledHours: cafeteriaMealUpdateHours });
   const [page, setPage] = useState(1);
 
   const handleSlide = useCallback(({ index, element, container }: onSlideProps) => {

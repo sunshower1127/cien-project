@@ -6,7 +6,7 @@ export const hours = 60 * minutes;
 // 이 방식이 별로라면 백엔드측에서 Server Sent Events를 구현하는게 좋음
 export const airPollutionUpdateRate = 30 * minutes;
 
-export const cafeteriaMealUpdateRate = 30 * minutes;
+export const cafeteriaMealUpdateHours = [9, 14, 19];
 export const cafetriaMealSlideRate = 10 * seconds;
 
 export const calendarUpdateRate = 10 * minutes;

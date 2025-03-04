@@ -4,7 +4,7 @@ import { fetchSubwayData } from "@/services/subway-arrival";
 import Card from "./ui/card";
 
 export default function SubwayArrival() {
-  const data = useAutoUpdate(subwayArrivalUpdateRate, fetchSubwayData);
+  const data = useAutoUpdate(fetchSubwayData, { intervalMs: subwayArrivalUpdateRate });
 
   return (
     <Card size="sm" alignment="center">

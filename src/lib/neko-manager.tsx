@@ -4,19 +4,10 @@ import { fetchCountOfStudentsInClubRoom } from "@/services/cctv-api";
 import { fetchNekoWeights } from "@/services/neko-weights";
 import { weightedRandom } from "@/utils/random";
 import { isNullish, repeatFn } from "@/utils/utils";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export default function NekoManager() {
-  const nekoContainer = useRef<HTMLDivElement>(null);
-
-  const peopleCnt = useAutoUpdate(peopleCountUpdateRate, fetchCountOfStudentsInClubRoom);
-
-  useEffect(() => {
-    if (!nekoContainer.current) return;
-    setNekoContainer(nekoContainer.current);
-    setNekoSpeed(1.0);
-    setNekoSize(2.0);
-  }, []);
+  const peopleCnt = useAutoUpdate(fetchCountOfStudentsInClubRoom, { intervalMs: peopleCountUpdateRate });
 
   useEffect(() => {
     if (!isNullish(peopleCnt)) {
@@ -24,13 +15,19 @@ export default function NekoManager() {
 
       if (peopleCnt > nekoCnt) {
         addRandomNekos(peopleCnt - nekoCnt);
-      } else if (peopleCnt < nekoCnt) {
+      } else {
         repeatFn(nekoCnt - peopleCnt, removeNeko);
       }
     }
   }, [peopleCnt]);
 
-  return <div aria-label="neko-container" ref={nekoContainer}></div>;
+  return <div aria-label="neko-container" ref={init}></div>;
+}
+
+function init(nekoContainer: HTMLDivElement) {
+  setNekoContainer(nekoContainer);
+  setNekoSpeed(1.0);
+  setNekoSize(2.0);
 }
 
 async function addRandomNekos(count: number) {

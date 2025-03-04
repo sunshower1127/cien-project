@@ -9,11 +9,11 @@ export default function CienCalendar() {
   const [src, setSrc] = useState(calendarURL);
 
   useAutoUpdate(
-    calendarUpdateRate,
     useCallback(() => {
       // 쿼리 파라미터를 추가하여 새로고침
       setSrc(`${calendarURL}?refresh=${Date.now()}`);
     }, []),
+    { intervalMs: calendarUpdateRate },
   );
 
   return (

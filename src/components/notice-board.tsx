@@ -4,7 +4,7 @@ import { fetchNoticeBoard } from "@/services/notice-board";
 import Card from "./ui/card";
 
 export default function NoticeBoard() {
-  const data = useAutoUpdate(noticeBoardUpdateRate, fetchNoticeBoard);
+  const data = useAutoUpdate(fetchNoticeBoard, { intervalMs: noticeBoardUpdateRate });
 
   return (
     <Card size="lg" theme="dark" className="flex-1">

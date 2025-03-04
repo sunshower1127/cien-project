@@ -4,7 +4,7 @@ import { fetchAirPollution, getPM10Color, getPM25Color } from "@/services/air-po
 import Card from "./ui/card";
 
 export default function AirPollution() {
-  const data = useAutoUpdate(airPollutionUpdateRate, fetchAirPollution);
+  const data = useAutoUpdate(fetchAirPollution, { intervalMs: airPollutionUpdateRate });
 
   return (
     <Card size="sm" alignment="center">

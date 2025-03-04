@@ -1,4 +1,4 @@
-# 중앙대 Cien SISO 키오스크 대쉬보드
+# 중앙대 동아리 Cien SISO 키오스크 대쉬보드
 
 - 날짜: 2025-03-01
 - 개발환경: mac + bun + vite + vercel

@@ -1,6 +1,6 @@
 import { HTMLProps } from "@/types/html";
 import { cn } from "@/utils/utils";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface onSlideProps {
   prevIndex: number;
@@ -10,6 +10,7 @@ export interface onSlideProps {
   container: Element;
 }
 
+/** onSlide는 useMemo 권장 */
 export default function AutoScrollSlider({
   onSlide,
   className,
@@ -19,27 +20,26 @@ export default function AutoScrollSlider({
   onSlide: ({ prevIndex, prevElement, index, element, container }: onSlideProps) => number;
 }) {
   const [index, setIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!containerRef?.current) return;
-    const container = containerRef.current;
+  const handleRef = useCallback(
+    (container: HTMLDivElement) => {
+      const prevIndex = index === 0 ? container.childElementCount - 1 : index - 1;
+      const prevElement = container.children[prevIndex];
+      const element = container.children[index];
 
-    const prevIndex = index === 0 ? container.childElementCount - 1 : index - 1;
-    const prevElement = container.children[prevIndex];
-    const element = container.children[index];
+      element.scrollIntoView({ behavior: "smooth", inline: "start" });
 
-    element.scrollIntoView({ behavior: "smooth", inline: "start" });
+      const duration = onSlide({ prevIndex, prevElement, index, element, container });
 
-    const duration = onSlide({ prevIndex, prevElement, index, element, container });
+      const timeoutID = setTimeout(() => setIndex((prev) => (prev === container.childElementCount - 1 ? 0 : prev + 1)), duration);
 
-    const timeoutID = setTimeout(() => setIndex((prev) => (prev === container.childElementCount - 1 ? 0 : prev + 1)), duration);
-
-    return () => clearTimeout(timeoutID);
-  }, [index, onSlide]); // onSlide은 부모에서 useCallback으로 메모이제이션 권장
+      return () => clearTimeout(timeoutID);
+    },
+    [index, onSlide],
+  );
 
   return (
-    <section aria-label="slider" className={cn("flex flex-row gap-[10px] overflow-hidden", className)} ref={containerRef} {...props}>
+    <section aria-label="slider" className={cn("flex flex-row gap-[10px] overflow-hidden", className)} ref={handleRef} {...props}>
       {children}
     </section>
   );

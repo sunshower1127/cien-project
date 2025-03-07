@@ -3,6 +3,7 @@ import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria
 import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/services/constants/time";
 import { getTimeOfDay } from "@/utils/utils";
 import { Suspense, use, useCallback, useMemo, useState } from "react";
+import ErrorBoundary from "./error-boundary";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
@@ -16,13 +17,16 @@ export default function CafeteriaMeal() {
   return (
     <Card size="sm" className="h-min">
       {data && (
-        <Suspense>
-          <Content promise={data} />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense>
+            <Content promise={data} />
+          </Suspense>
+        </ErrorBoundary>
       )}
     </Card>
   );
 }
+
 type MealsPromise = ReturnType<typeof fetchCafeteriaMeal>;
 
 function Content({ promise }: { promise: MealsPromise }) {
@@ -59,7 +63,7 @@ function Page({ item }: { item: NonNullable<Awaited<MealsPromise>>[number] }) {
         <Card.SubTitle>
           {item.date} {item.mealType}
         </Card.SubTitle>
-        <Card.SubText>운영시간</Card.SubText>
+        <Card.SubText>{item.dueTime}</Card.SubText>
       </div>
       <Card.Title className="-mt-[20px] truncate">{item.cafeteria}</Card.Title>
       <ul className="action-md flex flex-col gap-[6px] *:truncate">

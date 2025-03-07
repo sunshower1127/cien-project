@@ -5,6 +5,7 @@ type Response = {
   id: number;
   date: string;
   cafeteria: string;
+  dueTime: string;
   mealType: "아침" | "점심" | "저녁";
   menu: string; // needs to split by ","
 }[];
@@ -12,9 +13,10 @@ type Response = {
 export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") =>
   fetchWithStatusHandling(`${cafeterialMealApiURL}/${day}/${mealType}`, (data: Response) => {
     console.log("fetchCafeteriaMeal", day, mealType);
-    return data.map(({ cafeteria, date, mealType, menu }) => ({
+    return data.map(({ cafeteria, date, mealType, menu, dueTime }) => ({
       cafeteria,
       mealType,
+      dueTime,
       date: date.slice(5), // 연도 제거
       menu: menu.split(","),
     }));

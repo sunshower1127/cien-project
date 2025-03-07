@@ -1,5 +1,5 @@
-import { heroBannerApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { fetchWithStatusHandling } from "@/utils/fetch";
+import { heroBannerApiURL } from "./constants/url";
 
 // TODO: 성능 이슈로 비디오 기능 삭제?
 type Response = {

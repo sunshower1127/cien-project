@@ -1,6 +1,6 @@
-import { calendarUpdateRate } from "@/constants/time";
-import { calendarURL } from "@/constants/url";
 import useAutoUpdate from "@/hooks/use-auto-update";
+import { calendarUpdateRate } from "@/services/constants/time";
+import { calendarURL } from "@/services/constants/url";
 import { useCallback, useState } from "react";
 import Card from "./ui/card";
 

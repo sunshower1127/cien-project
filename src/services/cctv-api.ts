@@ -1,5 +1,5 @@
-import { peopleCountApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { fetchWithStatusHandling } from "@/utils/fetch";
+import { peopleCountApiURL } from "./constants/url";
 
 interface Response {
   peopleCount: number;

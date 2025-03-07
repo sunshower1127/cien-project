@@ -1,6 +1,6 @@
-import { nekoWeightsApiURL } from "@/constants/url";
 import { NekoType } from "@/lib/neko-manager";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { nekoWeightsApiURL } from "@/services/constants/url";
+import { fetchWithStatusHandling } from "@/utils/fetch";
 
 type Response = { [name in NekoType]?: number };
 

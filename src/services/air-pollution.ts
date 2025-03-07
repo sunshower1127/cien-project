@@ -1,5 +1,5 @@
-import { airPollutionApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { fetchWithStatusHandling } from "@/utils/fetch";
+import { airPollutionApiURL } from "./constants/url";
 
 interface Response {
   RealtimeCityAir: {

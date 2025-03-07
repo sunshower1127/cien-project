@@ -1,8 +1,11 @@
 import { isNullish } from "@/utils/utils";
 import { useEffect, useState } from "react";
 
-/** callback엔 useCallback 권장. options는 useMemo안써도 됨*/
-export default function useAutoUpdate<DataType>(callback: () => Promise<DataType> | DataType, options: { intervalMs?: number; scheduledHours?: number[] }) {
+/** callback엔 useCallback 권장. options는 useMemo안써도 됨 immediate 기본값은 true*/
+export default function useAutoUpdate<DataType>(
+  callback: () => Promise<DataType> | DataType,
+  options: { intervalMs?: number; scheduledHours?: number[]; immediate?: boolean },
+) {
   options.scheduledHours?.sort((a, b) => a - b); // 정확한 의존성 비교를 위해서 정렬
 
   const [data, setData] = useState<DataType>();
@@ -37,10 +40,10 @@ export default function useAutoUpdate<DataType>(callback: () => Promise<DataType
           scheduleNextCall();
         }, delay);
       };
-      updateData();
+      if (options.immediate !== false) updateData();
       scheduleNextCall();
     } else if (options.intervalMs) {
-      updateData();
+      if (options.immediate !== false) updateData();
       timerId = setInterval(updateData, options.intervalMs);
     } else {
       console.warn("No scheduling interval provided");

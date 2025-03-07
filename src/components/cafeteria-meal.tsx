@@ -1,13 +1,33 @@
-import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
-import { fetchCafeteriaMeal } from "@/services/cafeteria-meal";
-import { useCallback, useState } from "react";
+import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria-meal";
+import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/services/constants/time";
+import { getTimeOfDay } from "@/utils/utils";
+import { Suspense, use, useCallback, useMemo, useState } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
 export default function CafeteriaMeal() {
-  const data = useAutoUpdate(fetchCafeteriaMeal, { scheduledHours: cafeteriaMealUpdateHours });
+  const timeOfDay = useAutoUpdate(getTimeOfDay, { scheduledHours: cafeteriaMealUpdateHours });
+
+  const data = useMemo(() => {
+    return timeOfDay ? cafeteriaMealFetchPlan[timeOfDay]() : null;
+  }, [timeOfDay]);
+
+  return (
+    <Card size="sm" className="h-min">
+      {data && (
+        <Suspense>
+          <Content promise={data} />
+        </Suspense>
+      )}
+    </Card>
+  );
+}
+type MealsPromise = ReturnType<typeof fetchCafeteriaMeal>;
+
+function Content({ promise }: { promise: MealsPromise }) {
   const [page, setPage] = useState(1);
+  const data = use(promise);
 
   const handleSlide = useCallback(({ index, element, container }: onSlideProps) => {
     setPage(index + 1);
@@ -16,48 +36,32 @@ export default function CafeteriaMeal() {
       container.style.height = `${element.clientHeight}px`;
     }
 
-    return cafetriaMealSlideRate;
+    const slideDurationMultiplier = element.clientHeight / 400; // 메뉴 길이에 따라서 1/2 ~ 1배
+    return slideDurationMultiplier * cafetriaMealSlideRate;
   }, []);
 
-  if (!data) {
-    return (
-      <Card size="sm" className="h-min">
-        <Card.Title>식당 데이터 준비중...</Card.Title>
-      </Card>
-    );
-  }
-
   return (
-    <Card size="sm" className="h-min">
+    <>
       <AutoScrollSlider className="transition-[height] duration-300" onSlide={handleSlide}>
-        {data.map((item, index) => (
-          <Page key={index} item={item} />
-        ))}
+        {data?.map((item, index) => <Page key={index} item={item} />)}
       </AutoScrollSlider>
       <Card.SubTitle className="w-full text-center">
-        {page}/{data.length}
+        {page}/{data?.length}
       </Card.SubTitle>
-    </Card>
+    </>
   );
 }
 
-function Page({
-  item,
-}: {
-  item: {
-    cafeteria: string;
-    type: "중식" | "석식";
-    operatingHours: string;
-    menu: string[];
-  };
-}) {
+function Page({ item }: { item: NonNullable<Awaited<MealsPromise>>[number] }) {
   return (
     <Card.Section className="h-min w-full gap-[20px]">
       <div className="flex flex-row justify-between">
-        <Card.SubTitle>{item.type}</Card.SubTitle>
-        <Card.SubText>{item.operatingHours}</Card.SubText>
+        <Card.SubTitle>
+          {item.date} {item.mealType}
+        </Card.SubTitle>
+        <Card.SubText>운영시간</Card.SubText>
       </div>
-      <Card.Title className="truncate">{item.cafeteria}</Card.Title>
+      <Card.Title className="-mt-[20px] truncate">{item.cafeteria}</Card.Title>
       <ul className="action-md flex flex-col gap-[6px] *:truncate">
         {item.menu.map((menu) => (
           <li key={menu}>{menu}</li>

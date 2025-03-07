@@ -1,5 +1,5 @@
-import { noticeBoardUpdateRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
+import { noticeBoardUpdateRate } from "@/services/constants/time";
 import { fetchNoticeBoard } from "@/services/notice-board";
 import Card from "./ui/card";
 

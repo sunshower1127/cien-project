@@ -1,6 +1,6 @@
-import { heroBannerDefaultSlideRate, heroBannerUpdateRate, seconds } from "@/constants/time";
-import { heroBannerDefaultImageURL } from "@/constants/url";
 import useAutoUpdate from "@/hooks/use-auto-update";
+import { heroBannerDefaultSlideRate, heroBannerUpdateRate, seconds } from "@/services/constants/time";
+import { heroBannerDefaultImageURL } from "@/services/constants/url";
 import { fetchHeroBannerItems } from "@/services/hero-banner";
 import { useCallback } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";

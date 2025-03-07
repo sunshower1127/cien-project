@@ -1,5 +1,5 @@
-import { noticeBoardApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { fetchWithStatusHandling } from "@/utils/fetch";
+import { noticeBoardApiURL } from "./constants/url";
 
 type Response = {
   id: number;

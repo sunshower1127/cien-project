@@ -1,12 +1,12 @@
 export const airPollutionApiURL = "https://api.cien.or.kr/api/opendata/getAirData";
 
-export const cafeterialMealApiURL = "/dummy/cafeteria-meal.json";
+export const cafeterialMealApiURL = "https://https-proxy-rust.vercel.app/129.154.213.57:9001/meals"; // TODO: 프록시 서버 제거
 
 export const heroBannerApiURL = "/dummy/hero-banner.json";
 export const heroBannerDefaultImageURL =
   "https://plus.unsplash.com/premium_photo-1681412205238-8171ccaca82b?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-export const noticeBoardApiURL = "https://https-proxy-rust.vercel.app/129.154.213.57:9001/notices"; // 임시 프록시 서버 사용
+export const noticeBoardApiURL = "https://https-proxy-rust.vercel.app/129.154.213.57:9001/notices"; // TODO: 프록시 서버 제거
 
 export const subwayApiURL = "https://api.cien.or.kr/api/opendata/getSubwayData";
 

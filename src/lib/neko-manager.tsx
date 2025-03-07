@@ -1,6 +1,6 @@
-import { peopleCountUpdateRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { fetchCountOfStudentsInClubRoom } from "@/services/cctv-api";
+import { peopleCountUpdateRate } from "@/services/constants/time";
 import { fetchNekoWeights } from "@/services/neko-weights";
 import { weightedRandom } from "@/utils/random";
 import { isNullish, repeatFn } from "@/utils/utils";

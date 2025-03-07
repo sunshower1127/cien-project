@@ -1,5 +1,5 @@
-import { subwayApiURL } from "@/constants/url";
-import { fetchWithStatusHandling } from "@/utils/api";
+import { fetchWithStatusHandling } from "@/utils/fetch";
+import { subwayApiURL } from "./constants/url";
 
 interface Response {
   errorMessage: {

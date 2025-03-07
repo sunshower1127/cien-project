@@ -1,5 +1,5 @@
-import { subwayArrivalUpdateRate } from "@/constants/time";
 import useAutoUpdate from "@/hooks/use-auto-update";
+import { subwayArrivalUpdateRate } from "@/services/constants/time";
 import { fetchSubwayData } from "@/services/subway-arrival";
 import Card from "./ui/card";
 

@@ -1,7 +1,7 @@
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria-meal";
 import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/services/constants/time";
-import { getTimeOfDay } from "@/utils/utils";
+import { getTimeOfDay } from "@/utils/time";
 import { Suspense, use, useCallback, useMemo, useState } from "react";
 import ErrorBoundary from "./error-boundary";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";

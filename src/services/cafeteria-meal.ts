@@ -1,4 +1,5 @@
 import { fetchWithStatusHandling } from "@/utils/fetch";
+import { getKoreanDay } from "@/utils/time";
 import { cafeterialMealApiURL } from "./constants/url";
 
 type Response = {
@@ -7,7 +8,7 @@ type Response = {
   cafeteria: string;
   dueTime: string;
   mealType: "아침" | "점심" | "저녁";
-  menu: string; // needs to split by ","
+  menu: string;
 }[];
 
 export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") =>
@@ -19,7 +20,7 @@ export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "m
         cafeteria,
         mealType,
         dueTime,
-        date: date.slice(5), // 연도 제거
+        date: ((d) => `${d}(${getKoreanDay(d)})`)(date.slice(5)), // 연도 제거, 요일 추가
         menu: menu.split(","),
       }));
   });

@@ -8,6 +8,7 @@ type Response = {
   duration?: number; // 초 단위라고 가정
 }[];
 
+// TODO: Dummy fetching
 export const fetchHeroBannerItems = async () => fetchWithStatusHandling(heroBannerApiURL, (data: Response) => data);
 
 // {

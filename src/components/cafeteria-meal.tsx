@@ -3,7 +3,7 @@ import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria
 import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/services/constants/time";
 import { getTimeOfDay } from "@/utils/time";
 import { Suspense, use, useCallback, useMemo, useState } from "react";
-import ErrorBoundary from "./error-boundary";
+import ErrorBoundary from "./ui/error-boundary";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 

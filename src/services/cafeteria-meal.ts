@@ -13,7 +13,6 @@ type Response = {
 
 export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") =>
   fetchWithStatusHandling(`${cafeterialMealApiURL}/${day}/${mealType}`, (data: Response) => {
-    console.log("fetchCafeteriaMeal", day, mealType);
     return data
       .filter(({ menu }) => !!menu)
       .map(({ cafeteria, date, mealType, menu, dueTime }) => ({

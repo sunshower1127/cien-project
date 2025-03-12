@@ -35,11 +35,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         this.props.fallback || (
           <div className="error-boundary">
-            <h2>Something went wrong.</h2>
-            <details>
-              <summary>Error Details</summary>
-              <p>{this.state.error?.toString()}</p>
-            </details>
+            <h2>서버 에러</h2>
+            <p>재접속 시도중...</p>
           </div>
         )
       );

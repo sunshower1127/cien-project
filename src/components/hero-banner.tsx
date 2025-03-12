@@ -1,16 +1,17 @@
 import useAutoUpdate from "@/hooks/use-auto-update";
-import { heroBannerDefaultSlideRate, heroBannerUpdateRate, seconds } from "@/services/constants/time";
+import { heroBannerConfigUpdateRate, heroBannerUpdateRate, second } from "@/services/constants/time";
 import { heroBannerDefaultImageURL } from "@/services/constants/url";
-import { fetchHeroBannerItems } from "@/services/hero-banner";
+import { fetchHeroBannerConfig, fetchHeroBannerItems } from "@/services/hero-banner";
 import { useCallback } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
 
 export default function HeroBanner() {
+  const config = useAutoUpdate(fetchHeroBannerConfig, { intervalMs: heroBannerConfigUpdateRate });
   const data = useAutoUpdate(fetchHeroBannerItems, { intervalMs: heroBannerUpdateRate });
 
   const handleSlide = useCallback(
-    ({ prevElement, element, index }: onSlideProps) => {
+    ({ prevElement, element }: onSlideProps) => {
       if (prevElement instanceof HTMLVideoElement) {
         prevElement.pause();
         prevElement.currentTime = 0;
@@ -18,14 +19,12 @@ export default function HeroBanner() {
 
       if (element instanceof HTMLVideoElement) {
         element.play();
+        return Math.min(config?.videoMaxDisplayTime || 10, element.duration) * second;
       }
 
-      if (data && data.length > index && data[index].duration) {
-        return data[index].duration * seconds;
-      }
-      return heroBannerDefaultSlideRate;
+      return (config?.photoDisplayTime || 10) * second;
     },
-    [data],
+    [config?.videoMaxDisplayTime, config?.photoDisplayTime],
   );
 
   if (!data) {

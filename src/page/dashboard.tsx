@@ -7,7 +7,7 @@ import SubwayArrival from "@/components/subway-arrival";
 
 export default function Dashboard() {
   return (
-    <main className="bg-cien-blue-900 flex h-(--display-height) w-(--display-width) flex-row gap-(--card-gap) px-[12px] py-[12px]">
+    <main className="bg-cien-blue-900 flex h-(--display-height) w-(--display-width) flex-row gap-(--card-gap) overflow-clip px-[12px] py-[12px]">
       <div className="flex flex-col justify-between gap-(--card-gap)">
         <div className="flex flex-1 flex-row gap-(--card-gap)">
           <CafeteriaMeal />

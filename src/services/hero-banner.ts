@@ -5,12 +5,17 @@ import { heroBannerApiURL } from "./constants/url";
 type Response = {
   type: "image" | "video";
   url: string;
-  duration?: number; // 초 단위라고 가정
 }[];
+
+type ConfigResponse = {
+  photoDisplayTime: number;
+  videoMaxDisplayTime: number;
+};
 
 // TODO: Dummy fetching
 export const fetchHeroBannerItems = async () => fetchWithStatusHandling(heroBannerApiURL, (data: Response) => data);
 
+export const fetchHeroBannerConfig = async () => fetchWithStatusHandling(heroBannerApiURL, (data: ConfigResponse) => data);
 // {
 //   type: "video",
 //   url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",

@@ -25,11 +25,13 @@ export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "m
   });
 
 /* 업데이트 주기
+0시 -> 당일 아침, 당일 점심
 9시 -> 당일 점심
 14시 -> 당일 저녁, 익일 아침
 19시 -> 익일 아침, 익일 점심
 */
 export const cafeteriaMealFetchPlan = {
+  dawn: async () => [...((await fetchCafeteriaMeal("today", "morning")) || []), ...((await fetchCafeteriaMeal("today", "lunch")) || [])],
   morning: () => fetchCafeteriaMeal("today", "lunch"),
   day: async () => [...((await fetchCafeteriaMeal("today", "dinner")) || []), ...((await fetchCafeteriaMeal("tomorrow", "morning")) || [])],
   night: async () => [...((await fetchCafeteriaMeal("tomorrow", "morning")) || []), ...((await fetchCafeteriaMeal("tomorrow", "lunch")) || [])],

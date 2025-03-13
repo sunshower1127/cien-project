@@ -1,15 +1,10 @@
-import { cafeteriaMealUpdateHours } from "@/services/constants/time";
-
-export function getTimeOfDay(): "morning" | "day" | "night" {
+export function getTimeOfDay(breakfastHour = 9, lunchHour = 14, dinnerHour = 19): "dawn" | "morning" | "day" | "night" {
   const currentHour = new Date().getHours();
 
-  if (currentHour >= cafeteriaMealUpdateHours[0] && currentHour < cafeteriaMealUpdateHours[1]) {
-    return "morning";
-  } else if (currentHour >= cafeteriaMealUpdateHours[1] && currentHour < cafeteriaMealUpdateHours[2]) {
-    return "day";
-  } else {
-    return "night";
-  }
+  if (currentHour < breakfastHour) return "dawn";
+  if (currentHour < lunchHour) return "morning";
+  if (currentHour < dinnerHour) return "day";
+  return "night";
 }
 
 export function getKoreanDay(dateStr: string): string {

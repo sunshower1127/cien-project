@@ -16,7 +16,7 @@ export default function SubwayArrival() {
 }
 
 function Info({ title, msgs }: { title: string; msgs?: string[] }) {
-  if (!msgs)
+  if (!msgs || msgs.length === 0)
     return (
       <Card.Section className="items-center">
         <Card.Label>현재 열차 정보가 없습니다</Card.Label>

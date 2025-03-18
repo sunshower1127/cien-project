@@ -3,8 +3,8 @@ import { heroBannerApiURL } from "./constants/url";
 
 // TODO: 성능 이슈로 비디오 기능 삭제?
 type Response = {
-  type: "image" | "video";
-  url: string;
+  id: number;
+  mediaType: string;
 }[];
 
 type ConfigResponse = {
@@ -13,11 +13,12 @@ type ConfigResponse = {
 };
 
 // TODO: Dummy fetching
-export const fetchHeroBannerItems = async () => fetchWithStatusHandling(heroBannerApiURL, (data: Response) => data);
+export const fetchHeroBannerItems = async () =>
+  fetchWithStatusHandling(heroBannerApiURL, (data: Response) =>
+    data.map((item) => ({
+      type: item.mediaType.split("/")[0] as "image" | "video",
+      url: heroBannerApiURL + "/" + item.id,
+    })),
+  );
 
 export const fetchHeroBannerConfig = async () => fetchWithStatusHandling(heroBannerApiURL, (data: ConfigResponse) => data);
-// {
-//   type: "video",
-//   url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-//   duration: 4,
-// },

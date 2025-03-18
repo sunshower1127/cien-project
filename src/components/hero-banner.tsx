@@ -27,7 +27,7 @@ export default function HeroBanner() {
     [config?.videoMaxDisplayTime, config?.photoDisplayTime],
   );
 
-  if (!data) {
+  if (!data || data.length === 0) {
     return (
       <Card size="lg" className="aspect-video p-0">
         <img src={heroBannerDefaultImageURL} alt="기본 이미지" />

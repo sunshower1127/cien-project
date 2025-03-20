@@ -1,26 +1,53 @@
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria-meal";
-import { cafeteriaMealUpdateHours, cafetriaMealSlideRate } from "@/services/constants/time";
+import { cafeteriaMealUpdateHours, cafetriaMealSlideRate, RetryRate } from "@/services/constants/time";
 import { getTimeOfDay } from "@/utils/time";
-import { Suspense, use, useCallback, useMemo, useState } from "react";
-import ErrorBoundary from "./ui/error-boundary";
+import { useCallback, useEffect, useState } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
+import ErrorBoundary from "./ui/error-boundary";
 
 export default function CafeteriaMeal() {
   const timeOfDay = useAutoUpdate(getTimeOfDay, { scheduledHours: cafeteriaMealUpdateHours });
 
-  const data = useMemo(() => {
-    return timeOfDay ? cafeteriaMealFetchPlan[timeOfDay]() : null;
+  const [data, setData] = useState<Awaited<ReturnType<typeof fetchCafeteriaMeal>>>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    let retryIntervalId: ReturnType<typeof setInterval> | undefined;
+
+    (async () => {
+      try {
+        const newData = timeOfDay ? await cafeteriaMealFetchPlan[timeOfDay]() : null;
+        setData(newData);
+      } catch (e) {
+        console.error(e);
+        retryIntervalId = setInterval(async () => {
+          try {
+            const newData = timeOfDay ? await cafeteriaMealFetchPlan[timeOfDay]() : null;
+            setData(newData);
+            clearInterval(retryIntervalId);
+            retryIntervalId = undefined;
+          } catch (err) {
+            console.error("Retry attempt failed:", err);
+          }
+        }, RetryRate);
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+      if (retryIntervalId) {
+        clearInterval(retryIntervalId);
+      }
+    };
   }, [timeOfDay]);
 
   return (
     <Card size="sm" className="h-min">
       {data && (
         <ErrorBoundary>
-          <Suspense>
-            <Content promise={data} />
-          </Suspense>
+          <Content data={data} />
         </ErrorBoundary>
       )}
     </Card>
@@ -29,9 +56,8 @@ export default function CafeteriaMeal() {
 
 type MealsPromise = ReturnType<typeof fetchCafeteriaMeal>;
 
-function Content({ promise }: { promise: MealsPromise }) {
+function Content({ data }: { data: Awaited<MealsPromise> }) {
   const [page, setPage] = useState(1);
-  const data = use(promise);
 
   const handleSlide = useCallback(({ index, element, container }: onSlideProps) => {
     setPage(index + 1);

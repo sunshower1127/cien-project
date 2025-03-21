@@ -1,4 +1,4 @@
-import { RetryRate } from "@/services/constants/time";
+import { retryRate } from "@/services/constants/time";
 import { isNullish } from "@/utils/utils";
 import { useEffect, useState } from "react";
 
@@ -37,7 +37,7 @@ export default function useAutoUpdate<DataType>(callback: () => Promise<DataType
             } catch (err) {
               console.error("Retry attempt failed:", err);
             }
-          }, RetryRate);
+          }, retryRate);
         }
       }
     };

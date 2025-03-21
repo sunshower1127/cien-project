@@ -1,6 +1,6 @@
 import useAutoUpdate from "@/hooks/use-auto-update";
 import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria-meal";
-import { cafeteriaMealUpdateHours, cafetriaMealSlideRate, RetryRate } from "@/services/constants/time";
+import { cafeteriaMealUpdateHours, cafetriaMealSlideRate, retryRate } from "@/services/constants/time";
 import { getTimeOfDay } from "@/utils/time";
 import { useCallback, useEffect, useState } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
@@ -19,19 +19,27 @@ export default function CafeteriaMeal() {
     (async () => {
       try {
         const newData = timeOfDay ? await cafeteriaMealFetchPlan[timeOfDay]() : null;
+        if (!newData || newData.length === 0) {
+          throw new Error("No data");
+        }
         setData(newData);
       } catch (e) {
         console.error(e);
         retryIntervalId = setInterval(async () => {
           try {
-            const newData = timeOfDay ? await cafeteriaMealFetchPlan[timeOfDay]() : null;
-            setData(newData);
+            if (isMounted) {
+              const newData = timeOfDay ? await cafeteriaMealFetchPlan[timeOfDay]() : null;
+              if (!newData || newData.length === 0) {
+                throw new Error("No data");
+              }
+              setData(newData);
+            }
             clearInterval(retryIntervalId);
             retryIntervalId = undefined;
           } catch (err) {
             console.error("Retry attempt failed:", err);
           }
-        }, RetryRate);
+        }, retryRate);
       }
     })();
 

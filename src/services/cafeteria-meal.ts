@@ -1,5 +1,5 @@
 import { fetchWithStatusHandling } from "@/utils/fetch";
-import { getKoreanDay, getTimeOfDay } from "@/utils/time";
+import { getKoreanDay } from "@/utils/time";
 import { cafeterialMealApiURL } from "./constants/url";
 
 type Response = {

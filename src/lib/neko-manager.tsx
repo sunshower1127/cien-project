@@ -1,23 +1,28 @@
-import useAutoUpdate from "@/hooks/use-auto-update";
-import { fetchCountOfStudentsInClubRoom } from "@/services/cctv-api";
-import { peopleCountUpdateRate } from "@/services/constants/time";
-import { fetchNekoWeights } from "@/services/neko-weights";
-import { weightedRandom } from "@/utils/random";
-import { isNullish, repeatFn } from "@/utils/utils";
+import api, { refetchInterval } from "@/services/api";
+import { weightedRandom } from "@/utils/weighted-random";
+import { useQuery } from "@tanstack/react-query";
+import { isNil } from "es-toolkit";
+import { times } from "es-toolkit/compat";
 import { useEffect } from "react";
 
 export default function NekoManager() {
-  const peopleCnt = useAutoUpdate(fetchCountOfStudentsInClubRoom, { intervalMs: peopleCountUpdateRate });
+  const query = useQuery({
+    queryKey: ["people-count"],
+    queryFn: () => api.cien.getClubRoomPeopleCount(),
+    refetchInterval: refetchInterval.peopleCount,
+  });
+
+  const peopleCnt = query.data?.peopleCount;
 
   useEffect(() => {
-    if (!isNullish(peopleCnt)) {
-      const nekoCnt = getNekoLength();
+    if (isNil(peopleCnt)) return;
 
-      if (peopleCnt > nekoCnt) {
-        addRandomNekos(peopleCnt - nekoCnt);
-      } else {
-        repeatFn(nekoCnt - peopleCnt, removeNeko);
-      }
+    const nekoCnt = getNekoLength();
+
+    if (peopleCnt > nekoCnt) {
+      addRandomNekos(peopleCnt - nekoCnt);
+    } else {
+      times(nekoCnt - peopleCnt, removeNeko);
     }
   }, [peopleCnt]);
 
@@ -32,9 +37,9 @@ function init(nekoContainer: HTMLDivElement) {
 
 async function addRandomNekos(count: number) {
   try {
-    const weights = await fetchNekoWeights();
+    const weights = await api.dummy.getNekoWeights(); // TODO: DUMMY: 추후 수정
     if (weights !== null) {
-      weightedRandom({ weights, n: count }).forEach((type) => addNeko(type));
+      times(count, () => addNeko(weightedRandom(weights)));
     }
   } catch (error) {
     console.error(error);

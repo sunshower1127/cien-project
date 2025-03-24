@@ -1,10 +1,9 @@
-import useAutoUpdate from "@/hooks/use-auto-update";
-import { noticeBoardUpdateRate } from "@/services/constants/time";
-import { fetchNoticeBoard } from "@/services/notice-board";
+import api, { refetchInterval } from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
 import Card from "./ui/card";
 
 export default function NoticeBoard() {
-  const data = useAutoUpdate(fetchNoticeBoard, { intervalMs: noticeBoardUpdateRate });
+  const query = useQuery({ queryKey: ["notice"], queryFn: () => api.siso.getNotices(), refetchInterval: refetchInterval.notice });
 
   return (
     <Card size="lg" theme="dark" className="flex-1">
@@ -13,9 +12,18 @@ export default function NoticeBoard() {
         <Card.SubText>공지사항 세부내용 확인을 위해서는 디스코드 알림-공지 채널을 확인해주세요</Card.SubText>
       </Card.Section>
 
-      <ul className="title-lg flex flex-col gap-[12px] px-[24px] *:truncate">
-        {data?.map((content) => <li key={content}>{content}</li>) ?? <li>공지사항 정보가 없습니다</li>}
-      </ul>
+      <Card.Data
+        result={query}
+        render={(data) => (
+          <ul className="title-lg flex flex-col gap-[12px] px-[24px] *:truncate">
+            {data.map(({ id, date, notice }) => (
+              <li key={id}>
+                {date} {notice}
+              </li>
+            ))}
+          </ul>
+        )}
+      ></Card.Data>
     </Card>
   );
 }

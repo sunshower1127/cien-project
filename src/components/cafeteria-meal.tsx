@@ -1,78 +1,36 @@
-import useAutoUpdate from "@/hooks/use-auto-update";
-import { cafeteriaMealFetchPlan, fetchCafeteriaMeal } from "@/services/cafeteria-meal";
-import { cafeteriaMealUpdateHours, cafetriaMealSlideRate, retryRate } from "@/services/constants/time";
-import { getTimeOfDay } from "@/utils/time";
-import { useCallback, useEffect, useState } from "react";
+import { hour, second } from "@/constants/time";
+import useTimeOfDay, { getPrevTimeOfDay } from "@/hooks/use-time-of-day";
+import api from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
+import { kstFormat, parseYYYYMMDD } from "@toss/date";
+import { isEmpty } from "es-toolkit/compat";
+import { useCallback, useState } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
 import Card from "./ui/card";
-import ErrorBoundary from "./ui/error-boundary";
 
 export default function CafeteriaMeal() {
-  const timeOfDay = useAutoUpdate(getTimeOfDay, { scheduledHours: cafeteriaMealUpdateHours });
-  const [data, setData] = useState<Awaited<ReturnType<typeof fetchCafeteriaMeal>>>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [retryCount, setRetryCount] = useState(0); // 무한 재시도 방지를 위해 합리적인 값으로 변경
-
-  // fetchData에서 retryCount 의존성 제거
-  const fetchData = useCallback(async () => {
-    if (!timeOfDay) return;
-
-    try {
-      setIsLoading(true);
-      const newData = await cafeteriaMealFetchPlan[timeOfDay]();
-
-      if (!newData || newData.length === 0) {
-        throw new Error("No data");
+  const timeOfDay = useTimeOfDay();
+  const query = useQuery({
+    queryKey: ["cafeteria-meal", timeOfDay],
+    queryFn: async ({ client }) => {
+      const prev = client.getQueryData(["cafeteria-meal", getPrevTimeOfDay()]);
+      const current = await cafeteriaMealFetchPlan[timeOfDay]();
+      if (prev && JSON.stringify(prev) === JSON.stringify(current)) {
+        throw new Error("Server got no update. So I'll retry");
       }
-
-      setData(newData);
-      setRetryCount(0); // 성공 시 리셋
-    } catch (e) {
-      console.error("Failed to fetch meal data:", e);
-      // 여기서 retryCount를 직접 조작하지 않고 실패 신호만 보냄
-      setRetryCount((prev) => prev + 1);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [timeOfDay]); // retryCount 의존성 제거
-
-  // 최초 데이터 로드 및 timeOfDay 변경 시 로드
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, timeOfDay]);
-
-  // 재시도 로직을 별도의 useEffect로 분리
-  useEffect(() => {
-    // 재시도 로직은 retryCount가 0보다 클 때만 실행
-    if (retryCount > 0) {
-      console.log(`설정된 재시도 간격: ${retryRate}ms`);
-      console.log(`${retryCount}번째 재시도 예약됨...`);
-
-      const retryTimer = setTimeout(() => {
-        console.log(`${retryCount}번째 재시도 실행 중...`);
-        fetchData();
-      }, retryRate);
-
-      return () => clearTimeout(retryTimer);
-    }
-  }, [retryCount, fetchData]);
+      return current;
+    },
+    gcTime: 24 * hour,
+  });
 
   return (
     <Card size="sm" className="h-min">
-      {data && (
-        <ErrorBoundary>
-          <Content data={data} />
-        </ErrorBoundary>
-      )}
-      {isLoading && <p className="text-center text-sm">데이터를 불러오는 중...</p>}
-      {retryCount > 0 && <p className="text-muted-foreground text-center text-xs">재시도 중... ({retryCount / 2}분째..)</p>}
+      <Card.Data result={query} render={(data) => <Content data={data} />} />
     </Card>
   );
 }
 
-type MealsPromise = ReturnType<typeof fetchCafeteriaMeal>;
-
-function Content({ data }: { data: Awaited<MealsPromise> }) {
+function Content({ data }: { data: Meal[] }) {
   const [page, setPage] = useState(1);
 
   const handleSlide = useCallback(({ index, element, container }: onSlideProps) => {
@@ -82,23 +40,26 @@ function Content({ data }: { data: Awaited<MealsPromise> }) {
       container.style.height = `${element.clientHeight}px`;
     }
 
-    const slideDurationMultiplier = element.clientHeight / 400; // 메뉴 길이에 따라서 1/2 ~ 1배
-    return slideDurationMultiplier * cafetriaMealSlideRate;
+    const defaultSlideInterval = 10 * second; // 메뉴 슬라이드하는 기본 간격 = 10초
+    const slideDurationMultiplier = element.clientHeight / 400; // 메뉴 길이에 따라서 대략 1/2 ~ 1배
+    return slideDurationMultiplier * defaultSlideInterval;
   }, []);
 
   return (
     <>
       <AutoScrollSlider className="transition-[height] duration-300" onSlide={handleSlide}>
-        {data?.map((item, index) => <Page key={index} item={item} />)}
+        {data.map((item, index) => (
+          <Page key={index} item={item} />
+        ))}
       </AutoScrollSlider>
       <Card.SubTitle className="w-full text-center">
-        {page}/{data?.length}
+        {page}/{data.length}
       </Card.SubTitle>
     </>
   );
 }
 
-function Page({ item }: { item: NonNullable<Awaited<MealsPromise>>[number] }) {
+function Page({ item }: { item: Meal }) {
   return (
     <Card.Section className="h-min w-full gap-[20px]">
       <div className="flex flex-row justify-between">
@@ -116,3 +77,31 @@ function Page({ item }: { item: NonNullable<Awaited<MealsPromise>>[number] }) {
     </Card.Section>
   );
 }
+
+type Meal = Awaited<ReturnType<typeof fetchCafeteriaMeal>>[number];
+
+/* 업데이트 주기
+0시 -> 당일 아침, 당일 점심
+9시 -> 당일 점심
+14시 -> 당일 저녁, 익일 아침
+19시 -> 익일 아침, 익일 점심
+*/
+export const cafeteriaMealFetchPlan = {
+  dawn: async () => [...(await fetchCafeteriaMeal("today", "morning")), ...(await fetchCafeteriaMeal("today", "lunch"))],
+  morning: () => fetchCafeteriaMeal("today", "lunch"),
+  day: async () => [...(await fetchCafeteriaMeal("today", "dinner")), ...(await fetchCafeteriaMeal("tomorrow", "morning"))],
+  night: async () => [...(await fetchCafeteriaMeal("tomorrow", "morning")), ...(await fetchCafeteriaMeal("tomorrow", "lunch"))],
+};
+
+export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") => {
+  const meals = await api.siso.getMeals(day, mealType);
+  return meals
+    .filter(({ menu }) => !isEmpty(menu?.trim()))
+    .map(({ cafeteria, date, mealType, menu, dueTime }) => ({
+      cafeteria,
+      mealType,
+      dueTime,
+      date: kstFormat(parseYYYYMMDD(date), "MM.dd eee"), // 예: "03.21 월"
+      menu: menu.split(","),
+    }));
+};

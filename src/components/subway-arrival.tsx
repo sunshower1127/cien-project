@@ -1,22 +1,29 @@
-import useAutoUpdate from "@/hooks/use-auto-update";
-import { subwayArrivalUpdateRate } from "@/services/constants/time";
-import { fetchSubwayData } from "@/services/subway-arrival";
+import { useQuery } from "@tanstack/react-query";
 import Card from "./ui/card";
 
-export default function SubwayArrival() {
-  const data = useAutoUpdate(fetchSubwayData, { intervalMs: subwayArrivalUpdateRate });
+import api, { refetchInterval } from "@/services/api";
+import { isEmpty } from "es-toolkit/compat";
 
+export default function SubwayArrival() {
+  const query = useQuery({ queryKey: ["subway"], queryFn: () => getSubwayData(), refetchInterval: refetchInterval.subway });
   return (
     <Card size="sm" alignment="center">
       <Card.Title>지하철 도착 정보</Card.Title>
-      <Info title="개화행" msgs={data?.하행} />
-      <Info title="중앙보훈병원행" msgs={data?.상행} />
+      <Card.Data
+        result={query}
+        render={({ 하행, 상행 }) => (
+          <>
+            <Info title="개화행" msgs={하행} />
+            <Info title="중앙보훈병원행" msgs={상행} />
+          </>
+        )}
+      ></Card.Data>
     </Card>
   );
 }
 
 function Info({ title, msgs }: { title: string; msgs?: string[] }) {
-  if (!msgs || msgs.length === 0)
+  if (isEmpty(msgs))
     return (
       <Card.Section className="items-center">
         <Card.Label>현재 열차 정보가 없습니다</Card.Label>
@@ -35,3 +42,15 @@ function Info({ title, msgs }: { title: string; msgs?: string[] }) {
     </Card.Section>
   );
 }
+
+export const getSubwayData = async () => {
+  const { realtimeArrivalList } = await api.cien.getSubWayData();
+
+  const messages: { 하행: string[]; 상행: string[] } = { 하행: [], 상행: [] };
+
+  realtimeArrivalList.forEach(({ updnLine, arvlMsg2: message }) => {
+    messages[updnLine].push(message);
+  });
+
+  return messages;
+};

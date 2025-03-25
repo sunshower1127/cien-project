@@ -1,7 +1,7 @@
+import Card from "@/components/ui/card";
 import api, { refetchInterval } from "@/services/api";
 import { useInterval } from "@toss/react";
 import { useState } from "react";
-import Card from "./ui/card";
 
 export default function CienCalendar() {
   const [src, setSrc] = useState(api.google.getCalendarURL());

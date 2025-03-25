@@ -1,9 +1,9 @@
-import AirPollution from "@/components/air-pollution";
-import CafeteriaMeal from "@/components/cafeteria-meal";
-import CienCalendar from "@/components/cien-calendar";
-import HeroBanner from "@/components/hero-banner";
-import NoticeBoard from "@/components/notice-board";
-import SubwayArrival from "@/components/subway-arrival";
+import AirPollution from "@/features/air-pollution/_air-pollution";
+import CafeteriaMeal from "@/features/cafeteria-meal/_cafeteria-meal";
+import CienCalendar from "@/features/cien-calendar";
+import HeroBanner from "@/features/hero-banner/_hero-banner";
+import NoticeBoard from "@/features/notice-board";
+import SubwayArrival from "@/features/subway-arrival/_subway-arrival";
 
 export default function Dashboard() {
   return (

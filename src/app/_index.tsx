@@ -1,7 +1,7 @@
-import { minute, second } from "@/constants/time";
-import NekoManager from "@/lib/neko-manager";
+import NekoManager from "@/features/neko-manager/_neko-manager";
 import Dashboard from "@/pages/dashboard";
 import "@/styles/_index.css";
+import { minute, second } from "@/utils/time";
 import { keepPreviousData, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

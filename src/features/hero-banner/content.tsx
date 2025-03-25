@@ -1,35 +1,13 @@
-import { second } from "@/constants/time";
-
-import api, { refetchInterval } from "@/services/api";
-import { useQuery } from "@tanstack/react-query";
+import AutoScrollSlider, { onSlideProps } from "@/components/auto-scroll-slider";
+import api from "@/services/api";
+import { second } from "@/utils/time";
 import { noop } from "es-toolkit";
 import { useCallback } from "react";
-import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
-import Card from "./ui/card";
-
-export default function HeroBanner() {
-  const { data: config } = useQuery({
-    queryKey: ["hero-banner-config"],
-    queryFn: () => api.siso.getGalleryConfig(),
-    refetchInterval: refetchInterval.banner,
-  });
-  const query = useQuery({ queryKey: ["hero-banner-items"], queryFn: () => getBannerItems(), refetchInterval: refetchInterval.banner });
-
-  return (
-    <Card size="lg" className="aspect-video p-0">
-      <Card.Data
-        result={query}
-        emptyElement={() => <img src={api.dummy.getDefaultBannerImageURL()} alt="기본 이미지" />}
-        render={(data) => <Content data={data} config={config} />}
-      />
-    </Card>
-  );
-}
+import { ItemType } from "./_hero-banner";
 
 type ConfigType = Awaited<ReturnType<typeof api.siso.getGalleryConfig>>;
-type ItemType = Awaited<ReturnType<typeof getBannerItems>>;
 
-function Content({ data, config }: { data: ItemType; config?: ConfigType }) {
+export default function Content({ data, config }: { data: ItemType; config?: ConfigType }) {
   // TODO: 현재 일시적인 서버 에러로 임시방편으로 설정
   if (config) {
     if (config.photoDisplayTime > 1000 || config.videoMaxDisplayTime > 1000) {
@@ -73,13 +51,4 @@ function Content({ data, config }: { data: ItemType; config?: ConfigType }) {
       )}
     </AutoScrollSlider>
   );
-}
-
-async function getBannerItems() {
-  const items = await api.siso.getMedias();
-
-  return items.map((item) => ({
-    type: item.mediaType.split("/")[0] as "image" | "video",
-    url: api.siso.getMediaURL(item.id),
-  }));
 }

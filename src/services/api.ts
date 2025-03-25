@@ -1,7 +1,7 @@
-import { NekoType } from "@/lib/neko-manager";
+import { NekoType } from "@/features/neko-manager/neko-type";
 import ky from "ky";
-import { CIEN_API_KEY } from "../constants/key";
-import { minute, second } from "../constants/time";
+import { CIEN_API_KEY } from "../secrets/key";
+import { minute, second } from "../utils/time";
 
 // 데이터 갱신 주기
 export const refetchInterval = {
@@ -85,7 +85,6 @@ const siso = Object.assign(ky.create({ prefixUrl: SISO_URL }), {
 
 const dummy = Object.assign(ky.create({ prefixUrl: "/dummy" }), {
   getNekoWeights: () => dummy.get("neko-weights.json").json<{ [name in NekoType]?: number }>(),
-  getDefaultBannerImageURL: () => "/dummy/banner.jpeg",
 });
 
 const google = {

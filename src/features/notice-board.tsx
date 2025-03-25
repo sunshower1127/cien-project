@@ -1,6 +1,6 @@
+import Card from "@/components/ui/card";
 import api, { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
-import Card from "./ui/card";
 
 export default function NoticeBoard() {
   const query = useQuery({ queryKey: ["notice"], queryFn: () => api.siso.getNotices(), refetchInterval: refetchInterval.notice });

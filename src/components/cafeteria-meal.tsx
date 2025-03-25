@@ -1,8 +1,8 @@
-import { hour, second } from "@/constants/time";
-import useTimeOfDay, { getPrevTimeOfDay } from "@/hooks/use-time-of-day";
+import { minute, second } from "@/constants/time";
 import api from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { kstFormat, parseYYYYMMDD } from "@toss/date";
+import { useInterval } from "@toss/react";
 import { isEmpty } from "es-toolkit/compat";
 import { useCallback, useState } from "react";
 import AutoScrollSlider, { onSlideProps } from "./ui/auto-scroll-slider";
@@ -10,18 +10,8 @@ import Card from "./ui/card";
 
 export default function CafeteriaMeal() {
   const timeOfDay = useTimeOfDay();
-  const query = useQuery({
-    queryKey: ["cafeteria-meal", timeOfDay],
-    queryFn: async ({ client }) => {
-      const prev = client.getQueryData(["cafeteria-meal", getPrevTimeOfDay()]);
-      const current = await cafeteriaMealFetchPlan[timeOfDay]();
-      if (prev && JSON.stringify(prev) === JSON.stringify(current)) {
-        throw new Error("Server got no update. So I'll retry");
-      }
-      return current;
-    },
-    gcTime: 24 * hour,
-  });
+  console.log(timeOfDay);
+  const query = useQuery({ queryKey: ["cafeteria-meal", timeOfDay], queryFn: () => cafeteriaMealFetchPlan[timeOfDay]() });
 
   return (
     <Card size="sm" className="h-min">
@@ -86,14 +76,22 @@ type Meal = Awaited<ReturnType<typeof fetchCafeteriaMeal>>[number];
 14시 -> 당일 저녁, 익일 아침
 19시 -> 익일 아침, 익일 점심
 */
-export const cafeteriaMealFetchPlan = {
+type TimeOfDay = "dawn" | "morning" | "day" | "night";
+
+const timeTable = Array.from({ length: 24 })
+  .fill("dawn", 0, 9)
+  .fill("morning", 9, 14)
+  .fill("day", 14, 19)
+  .fill("night", 19, 24) as TimeOfDay[];
+
+const cafeteriaMealFetchPlan = {
   dawn: async () => [...(await fetchCafeteriaMeal("today", "morning")), ...(await fetchCafeteriaMeal("today", "lunch"))],
   morning: () => fetchCafeteriaMeal("today", "lunch"),
   day: async () => [...(await fetchCafeteriaMeal("today", "dinner")), ...(await fetchCafeteriaMeal("tomorrow", "morning"))],
   night: async () => [...(await fetchCafeteriaMeal("tomorrow", "morning")), ...(await fetchCafeteriaMeal("tomorrow", "lunch"))],
 };
 
-export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") => {
+async function fetchCafeteriaMeal(day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") {
   const meals = await api.siso.getMeals(day, mealType);
   return meals
     .filter(({ menu }) => !isEmpty(menu?.trim()))
@@ -104,4 +102,20 @@ export const fetchCafeteriaMeal = async (day: "today" | "tomorrow", mealType: "m
       date: kstFormat(parseYYYYMMDD(date), "MM.dd eee"), // 예: "03.21 월"
       menu: menu.split(","),
     }));
-};
+}
+
+function useTimeOfDay() {
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>("dawn");
+
+  useInterval(
+    () => {
+      const newTimeOfDay = timeTable[new Date().getHours()];
+      if (timeOfDay !== newTimeOfDay) {
+        setTimeOfDay(newTimeOfDay);
+      }
+    },
+    { delay: 1 * minute, trailing: false },
+  );
+
+  return timeOfDay;
+}

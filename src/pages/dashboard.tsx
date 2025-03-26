@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/components/errorboundary";
 import AirPollution from "@/features/air-pollution/_air-pollution";
 import CafeteriaMeal from "@/features/cafeteria-meal/_cafeteria-meal";
 import CienCalendar from "@/features/cien-calendar";
@@ -10,17 +11,29 @@ export default function Dashboard() {
     <main className="bg-cien-blue-900 flex h-(--display-height) w-(--display-width) flex-row gap-(--card-gap) overflow-clip px-[12px] py-[12px]">
       <div className="flex flex-col justify-between gap-(--card-gap)">
         <div className="flex flex-1 flex-row gap-(--card-gap)">
-          <CafeteriaMeal />
+          <ErrorBoundary>
+            <CafeteriaMeal />
+          </ErrorBoundary>
           <div className="flex flex-col gap-(--card-gap)">
-            <SubwayArrival />
-            <AirPollution />
+            <ErrorBoundary>
+              <SubwayArrival />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <AirPollution />
+            </ErrorBoundary>
           </div>
         </div>
-        <CienCalendar />
+        <ErrorBoundary>
+          <CienCalendar />
+        </ErrorBoundary>
       </div>
       <div className="flex flex-col justify-between gap-(--card-gap)">
-        <HeroBanner />
-        <NoticeBoard />
+        <ErrorBoundary>
+          <HeroBanner />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <NoticeBoard />
+        </ErrorBoundary>
       </div>
     </main>
   );

@@ -111,15 +111,9 @@ function Data<T>({
   const EmptyElement = emptyElement;
   return (
     <>
-      {result.isLoading ? (
-        <LoadingElement />
-      ) : result.error ? (
-        <ErrorElement error={result.error} />
-      ) : isEmpty(result.data) ? (
-        <EmptyElement />
-      ) : (
-        render(result.data!)
-      )}
+      {result.isLoading && <LoadingElement />}
+      {result.error && <ErrorElement error={result.error} />}
+      {isEmpty(result.data) ? <EmptyElement /> : render(result.data!)}
     </>
   );
 }

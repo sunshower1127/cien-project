@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { kstFormat, parseYYYYMMDD } from "@toss/date";
+import { getShortKoreanDayOfWeek } from "@/utils/time";
 import { isEmpty } from "es-toolkit/compat";
 
 /* 업데이트 주기
@@ -19,13 +19,16 @@ async function fetchCafeteriaMeal(day: "today" | "tomorrow", mealType: "morning"
   const meals = await api.siso.getMeals(day, mealType);
   return meals
     .filter(({ menu }) => !isEmpty(menu?.trim()))
-    .map(({ cafeteria, date, mealType, menu, dueTime }) => ({
-      cafeteria,
-      mealType,
-      dueTime,
-      date: kstFormat(parseYYYYMMDD(date), "MM.dd eee"), // 예: "03.21 월"
-      menu: menu.split(","),
-    }));
+    .map(({ cafeteria, date, mealType, menu, dueTime }) => {
+      const [year, month, day] = date.split(".");
+      return {
+        cafeteria,
+        mealType,
+        dueTime,
+        date: `${month}.${day} (${getShortKoreanDayOfWeek(`${year}-${month}-${day}`)})`,
+        menu: menu.split(","),
+      };
+    });
 }
 
 export type Meal = Awaited<ReturnType<typeof fetchCafeteriaMeal>>[number];

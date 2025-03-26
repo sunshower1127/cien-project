@@ -7,7 +7,6 @@ import useTimeOfDay from "./use-time-of-day";
 
 export default function CafeteriaMeal() {
   const timeOfDay = useTimeOfDay();
-  console.log(timeOfDay);
   const query = useQuery({ queryKey: ["cafeteria-meal", timeOfDay], queryFn: () => cafeteriaMealFetchPlan[timeOfDay]() });
 
   return (

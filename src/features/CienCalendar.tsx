@@ -1,14 +1,16 @@
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/Card";
+import useSafeEffect from "@/lib/sw-toolkit/hooks/useSafeEffect";
 import api, { refetchInterval } from "@/services/api";
-import { useInterval } from "@toss/react";
+import { delay } from "es-toolkit";
 import { useState } from "react";
 
 export default function CienCalendar() {
   const [src, setSrc] = useState(api.google.getCalendarURL());
 
-  useInterval(() => {
+  useSafeEffect(async () => {
+    await delay(refetchInterval.calendar);
     setSrc(`${api.google.getCalendarURL()}?refresh=${Date.now()}`);
-  }, refetchInterval.calendar);
+  }, [src]);
 
   return (
     <Card size="md" className="flex-1 p-0">

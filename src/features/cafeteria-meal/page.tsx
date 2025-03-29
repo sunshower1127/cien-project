@@ -1,4 +1,4 @@
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/Card";
 import { Meal } from "./service";
 
 export default function Page({ item }: { item: Meal }) {

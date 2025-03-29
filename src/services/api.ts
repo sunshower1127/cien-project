@@ -1,7 +1,7 @@
 import { NekoType } from "@/features/neko-manager/neko-type";
 import ky from "ky";
+import { minute, second } from "../lib/sw-toolkit/utils/time";
 import { CIEN_API_KEY } from "../secrets/key";
-import { minute, second } from "../utils/time";
 
 // 데이터 갱신 주기
 export const refetchInterval = {

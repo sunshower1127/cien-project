@@ -1,5 +1,5 @@
-import { minute } from "@/utils/time";
-import { useInterval } from "@toss/react";
+import useSafeEffect from "@/lib/sw-toolkit/hooks/useSafeEffect";
+import { delay } from "es-toolkit";
 import { useState } from "react";
 
 type TimeOfDay = "dawn" | "morning" | "day" | "night";
@@ -13,15 +13,10 @@ const timeTable = Array.from({ length: 24 })
 export default function useTimeOfDay() {
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>("dawn");
 
-  useInterval(
-    () => {
-      const newTimeOfDay = timeTable[new Date().getHours()];
-      if (timeOfDay !== newTimeOfDay) {
-        setTimeOfDay(newTimeOfDay);
-      }
-    },
-    { delay: 1 * minute, trailing: false },
-  );
+  useSafeEffect(async () => {
+    await delay(1000);
+    setTimeOfDay(timeTable[new Date().getHours()]);
+  }, [timeOfDay]);
 
   return timeOfDay;
 }

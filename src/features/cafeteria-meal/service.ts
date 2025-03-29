@@ -1,6 +1,6 @@
+import { getShortKoreanDayOfWeek } from "@/lib/sw-toolkit/utils/time";
+import { isNotEmpty } from "@/lib/sw-toolkit/utils/utils";
 import api from "@/services/api";
-import { getShortKoreanDayOfWeek } from "@/utils/time";
-import { isEmpty } from "es-toolkit/compat";
 
 /* 업데이트 주기
 0시 -> 당일 아침, 당일 점심
@@ -18,7 +18,7 @@ export const cafeteriaMealFetchPlan = {
 async function fetchCafeteriaMeal(day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") {
   const meals = await api.siso.getMeals(day, mealType);
   return meals
-    .filter(({ menu }) => !isEmpty(menu?.trim()))
+    .filter(({ menu }) => isNotEmpty(menu?.trim()))
     .map(({ cafeteria, date, mealType, menu, dueTime }) => {
       const [year, month, day] = date.split(".");
       return {

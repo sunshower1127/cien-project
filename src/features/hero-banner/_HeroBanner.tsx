@@ -1,8 +1,8 @@
 import defaultHeroBannerImage from "@/assets/default-banner.jpg";
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/Card";
 import api, { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
-import Content from "./content";
+import Content from "./Content";
 
 export default function HeroBanner() {
   const { data: config } = useQuery({
@@ -15,8 +15,8 @@ export default function HeroBanner() {
   return (
     <Card size="lg" className="aspect-video p-0">
       <Card.Data
-        result={query}
-        emptyElement={() => <img src={defaultHeroBannerImage} alt="기본 이미지" />}
+        query={query}
+        EmptyComponent={() => <img src={defaultHeroBannerImage} alt="기본 이미지" />}
         render={(data) => <Content data={data} config={config} />}
       />
     </Card>

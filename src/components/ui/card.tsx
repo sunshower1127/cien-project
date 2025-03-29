@@ -1,8 +1,8 @@
-import { HTMLProps } from "@/types/html";
-import { cn } from "@/utils/tailwind";
+import { HTMLProps } from "@/lib/sw-toolkit/types/html";
+import { cn } from "@/lib/sw-toolkit/utils/style";
 import { cva, VariantProps } from "class-variance-authority";
-import { isEmpty } from "es-toolkit/compat";
 import { ComponentType, ReactNode } from "react";
+import Awaited from "../../lib/sw-toolkit/components/Awaited";
 
 const cardVariants = cva("flex flex-col gap-[16px] rounded-[20px] p-[20px] overflow-hidden", {
   variants: {
@@ -94,27 +94,38 @@ function Empty() {
 }
 
 function Data<T>({
-  result,
+  query,
   render,
-  loadingElement = Loading,
-  errorElement = Error,
-  emptyElement = Empty,
+  renderLoading,
+  renderError,
+  renderEmpty,
+  Component,
+  LoadingComponent = Loading,
+  ErrorComponent = Error,
+  EmptyComponent = Empty,
 }: {
-  result: { isLoading?: boolean; error?: Error | null; data?: T | null };
-  render: (data: T) => ReactNode;
-  loadingElement?: ComponentType<HTMLProps<"svg">>;
-  errorElement?: ComponentType<{ error: Error }>;
-  emptyElement?: ComponentType;
+  query: { isLoading?: boolean; error?: Error | null; data?: T | null };
+  render?: (data: T) => ReactNode;
+  renderLoading?: () => ReactNode;
+  renderError?: (error: Error) => ReactNode;
+  renderEmpty?: () => ReactNode;
+  Component?: ComponentType<{ data: T }>;
+  LoadingComponent?: ComponentType<HTMLProps<"svg">>;
+  ErrorComponent?: ComponentType<{ error: Error }>;
+  EmptyComponent?: ComponentType;
 }) {
-  const LoadingElement = loadingElement;
-  const ErrorElement = errorElement;
-  const EmptyElement = emptyElement;
   return (
-    <>
-      {result.isLoading && <LoadingElement />}
-      {result.error && <ErrorElement error={result.error} />}
-      {isEmpty(result.data) ? <EmptyElement /> : render(result.data!)}
-    </>
+    <Awaited
+      query={query}
+      render={render}
+      renderLoading={renderLoading}
+      renderError={renderError}
+      renderEmpty={renderEmpty}
+      Component={Component}
+      LoadingComponent={LoadingComponent}
+      ErrorComponent={ErrorComponent}
+      EmptyComponent={EmptyComponent}
+    />
   );
 }
 

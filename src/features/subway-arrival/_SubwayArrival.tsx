@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
+import Card from "@/components/ui/Card";
 import api, { refetchInterval } from "@/services/api";
-import Card from "@/components/ui/card";
-import Info from "./info";
+import Info from "./Info";
 
 export default function SubwayArrival() {
   const query = useQuery({ queryKey: ["subway"], queryFn: () => getSubwayData(), refetchInterval: refetchInterval.subway });
@@ -10,7 +10,7 @@ export default function SubwayArrival() {
     <Card size="sm" alignment="center">
       <Card.Title>지하철 도착 정보</Card.Title>
       <Card.Data
-        result={query}
+        query={query}
         render={({ 하행, 상행 }) => (
           <>
             <Info title="개화행" msgs={하행} />

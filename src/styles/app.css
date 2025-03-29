@@ -2,5 +2,5 @@
 
 @import "tailwindcss";
 
-@import "@/styles/base.css";
+@import "@/lib/sw-toolkit/styles/base.css";
 @import "@/styles/figma.css";

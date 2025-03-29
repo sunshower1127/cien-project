@@ -1,10 +1,10 @@
-import ErrorBoundary from "@/components/errorboundary";
-import AirPollution from "@/features/air-pollution/_air-pollution";
-import CafeteriaMeal from "@/features/cafeteria-meal/_cafeteria-meal";
-import CienCalendar from "@/features/cien-calendar";
-import HeroBanner from "@/features/hero-banner/_hero-banner";
-import NoticeBoard from "@/features/notice-board";
-import SubwayArrival from "@/features/subway-arrival/_subway-arrival";
+import AirPollution from "@/features/air-pollution/AirPollution";
+import CafeteriaMeal from "@/features/cafeteria-meal/_CafeteriaMeal";
+import CienCalendar from "@/features/CienCalendar";
+import HeroBanner from "@/features/hero-banner/_HeroBanner";
+import NoticeBoard from "@/features/NoticeBoard";
+import SubwayArrival from "@/features/subway-arrival/_SubwayArrival";
+import ErrorBoundary from "@/lib/sw-toolkit/components/ErrorBoundary";
 
 export default function Dashboard() {
   return (
@@ -15,25 +15,15 @@ export default function Dashboard() {
             <CafeteriaMeal />
           </ErrorBoundary>
           <div className="flex flex-col gap-(--card-gap)">
-            <ErrorBoundary>
-              <SubwayArrival />
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <AirPollution />
-            </ErrorBoundary>
+            <SubwayArrival />
+            <AirPollution />
           </div>
         </div>
-        <ErrorBoundary>
-          <CienCalendar />
-        </ErrorBoundary>
+        <CienCalendar />
       </div>
       <div className="flex flex-col justify-between gap-(--card-gap)">
-        <ErrorBoundary>
-          <HeroBanner />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <NoticeBoard />
-        </ErrorBoundary>
+        <HeroBanner />
+        <NoticeBoard />
       </div>
     </main>
   );

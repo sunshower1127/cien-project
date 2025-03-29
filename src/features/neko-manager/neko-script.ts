@@ -1,7 +1,7 @@
 import api from "@/services/api";
 import { times } from "es-toolkit/compat";
 import { NekoType } from "./neko-type";
-import { weightedRandom } from "./weighted-random";
+import { weightedRandom } from "./weightedRandom";
 
 declare function addNeko(nekoType?: NekoType): void;
 declare function setNekoContainer(element: string | HTMLElement): void;
@@ -15,14 +15,8 @@ function init(nekoContainer: HTMLDivElement) {
 }
 
 async function addRandomNekos(count: number) {
-  try {
-    const weights = await api.dummy.getNekoWeights(); // TODO: DUMMY: 추후 수정
-    if (weights !== null) {
-      times(count, () => addNeko(weightedRandom(weights)));
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  const weights = await api.dummy.getNekoWeights(); // TODO: DUMMY: 추후 수정
+  times(count, () => addNeko(weightedRandom(weights)));
 }
 
 export { addRandomNekos, init };

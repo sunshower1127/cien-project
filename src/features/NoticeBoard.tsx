@@ -1,4 +1,4 @@
-import Card from "@/components/ui/card";
+import Card from "@/components/ui/Card";
 import api, { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -13,7 +13,7 @@ export default function NoticeBoard() {
       </Card.Section>
 
       <Card.Data
-        result={query}
+        query={query}
         render={(data) => (
           <ul className="title-lg flex flex-col gap-[12px] px-[24px] *:truncate">
             {data.map(({ id, date, notice }) => (

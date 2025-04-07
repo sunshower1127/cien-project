@@ -35,5 +35,5 @@ export default function NekoManager() {
     init(element);
   }, []);
 
-  return <div aria-label="neko-container" ref={handleRef}></div>;
+  return <div className="absolute h-(--display-height) w-(--display-width)" aria-label="neko-container" ref={handleRef}></div>;
 }

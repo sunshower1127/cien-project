@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -23,6 +24,8 @@ func main() {
 
 	// 로깅 미들웨어 추가
 	app.Use(logger.New())
+
+	app.Use(cors.New())
 
 	// 정적 파일 서빙 설정
 	app.Use("/", filesystem.New(filesystem.Config{

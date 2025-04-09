@@ -1,45 +1,48 @@
 package main
 
 import (
-	"embed"
-	"io/fs"
+	"flag"
+	"fmt"
 	"log"
+
 	"net/http"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-//go:embed all:dist
-var distDir embed.FS
-
-func getDistFS() http.FileSystem {
-	stripped, err := fs.Sub(distDir, "dist")
-	if err != nil {
-		panic(err)
-	}
-	return http.FS(stripped)
-}
-
 func main() {
+	// 커맨드라인 플래그를 이용한 포트 설정
+	port := flag.Int("port", 3000, "포트 번호 설정")
+	flag.Parse()
+
 	app := fiber.New(fiber.Config{
-		// HTML 압축 활성화
-		CompressedFileSuffix: ".fiber.gz",
+		AppName: "Cien Project Static Server",
 	})
 
-	app.All("/*", filesystem.New(filesystem.Config{
-		Root:         getDistFS(),
-		NotFoundFile: "index.html",
-		Index:        "index.html",
+	// 로깅 미들웨어 추가
+	app.Use(logger.New())
+
+	// 정적 파일 서빙 설정
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:   http.Dir("./dist"),
+		Browse: false,
+		Index:  "index.html",
 	}))
 
-	// 환경 변수에서 포트를 가져오거나 기본값 사용
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
+	// SPA 라우팅을 위한 설정 (모든 경로를 index.html로 리디렉션)
+	app.Use(func(c *fiber.Ctx) error {
+		if err := c.SendFile("./dist/index.html"); err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Error loading index file")
+		}
+		return nil
+	})
 
-	log.Printf("서버가 http://localhost:%s 에서 실행 중입니다", port)
-	log.Fatal(app.Listen(":" + port))
+	// 서버 시작
+	addr := fmt.Sprintf(":%d", *port)
+	log.Printf("서버 시작: http://localhost%s", addr)
+	if err := app.Listen(addr); err != nil {
+		log.Fatalf("서버 시작 실패: %v", err)
+	}
 }

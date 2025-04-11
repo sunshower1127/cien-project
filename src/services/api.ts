@@ -46,7 +46,7 @@ const cien = Object.assign(
   },
 );
 
-const SISO_URL = "http://129.154.213.57:9001";
+const SISO_URL = "https://kioskserver.cien.or.kr";
 const siso = Object.assign(ky.create({ prefixUrl: SISO_URL }), {
   getMeals: (day: "today" | "tomorrow", mealType: "morning" | "lunch" | "dinner") =>
     siso.get(`meals/${day}/${mealType}`).json<

@@ -1,9 +1,9 @@
-import AirPollution from "@/features/air-pollution/AirPollution";
-import CafeteriaMeal from "@/features/cafeteria-meal/_CafeteriaMeal";
-import CienCalendar from "@/features/CienCalendar";
-import HeroBanner from "@/features/hero-banner/_HeroBanner";
-import NoticeBoard from "@/features/NoticeBoard";
-import SubwayArrival from "@/features/subway-arrival/_SubwayArrival";
+import AirPollution from "@/features/air-pollution";
+import CafeteriaMeal from "@/features/cafeteria-meal";
+import CienCalendar from "@/features/cien-calendar";
+import HeroBanner from "@/features/hero-banner";
+import NoticeBoard from "@/features/notice-board";
+import SubwayArrival from "@/features/subway-arrival";
 import ErrorBoundary from "@/lib/sw-toolkit/components/ErrorBoundary";
 
 export default function Dashboard() {

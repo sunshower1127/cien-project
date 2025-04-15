@@ -1,7 +1,7 @@
 import api from "@/services/api";
 import { times } from "es-toolkit/compat";
 import { NekoType } from "./neko-type";
-import { weightedRandom } from "./weightedRandom";
+import { weightedRandom } from "./weighted-random";
 
 declare function addNeko(nekoType?: NekoType): void;
 declare function setNekoContainer(element: string | HTMLElement): void;

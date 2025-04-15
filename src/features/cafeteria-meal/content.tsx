@@ -1,9 +1,9 @@
-import AutoScrollSlider, { OnSlideProps } from "@/components/AutoScrollSlider";
-import Card from "@/components/ui/Card";
+import AutoScrollSlider, { OnSlideProps } from "@/components/auto-scroll-slider";
+import Card from "@/components/ui/card";
 import ErrorBoundary from "@/lib/sw-toolkit/components/ErrorBoundary";
 import { second } from "@/lib/sw-toolkit/utils/time";
 import { useCallback, useState } from "react";
-import Page from "./Page";
+import Page from "./page";
 import { Meal } from "./service";
 
 export default function Content({ data }: { data: Meal[] }) {

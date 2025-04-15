@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { getAirData, getPM10Color, getPM25Color } from "./service";

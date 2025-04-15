@@ -1,8 +1,8 @@
 import defaultHeroBannerImage from "@/assets/default-banner.jpg";
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import api, { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
-import Content from "./Content";
+import Content from "./content";
 
 export default function HeroBanner() {
   const { data: config } = useQuery({

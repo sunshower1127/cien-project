@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import { isEmpty } from "es-toolkit/compat";
 
 export default function Info({ title, msgs }: { title: string; msgs?: string[] }) {

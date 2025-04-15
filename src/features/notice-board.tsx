@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import api, { refetchInterval } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 

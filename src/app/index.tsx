@@ -1,4 +1,4 @@
-import NekoManager from "@/features/neko-manager/_NekoManager";
+import NekoManager from "@/features/neko-manager";
 import ErrorBoundary from "@/lib/sw-toolkit/components/ErrorBoundary";
 import { minute, second } from "@/lib/sw-toolkit/utils/time";
 import Dashboard from "@/pages/dashboard";

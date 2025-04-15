@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import useError from "@/lib/sw-toolkit/hooks/useError";
-import Content from "./Content";
+import Content from "./content";
 import { cafeteriaMealFetchPlan } from "./service";
-import useTimeOfDay from "./useTimeOfDay";
+import useTimeOfDay from "./use-time-of-day";
 
 export default function CafeteriaMeal() {
   useError({ onInfiniteRendering: "throwError" });

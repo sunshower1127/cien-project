@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import api, { refetchInterval } from "@/services/api";
-import Info from "./Info";
+import Info from "./info";
 
 export default function SubwayArrival() {
   const query = useQuery({ queryKey: ["subway"], queryFn: () => getSubwayData(), refetchInterval: refetchInterval.subway });

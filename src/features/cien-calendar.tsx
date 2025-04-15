@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import Card from "@/components/ui/card";
 import useSafeEffect from "@/lib/sw-toolkit/hooks/useSafeEffect";
 import api, { refetchInterval } from "@/services/api";
 import { delay } from "es-toolkit";

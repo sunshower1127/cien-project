@@ -1,9 +1,9 @@
-import AutoScrollSlider, { OnSlideProps } from "@/components/AutoScrollSlider";
+import AutoScrollSlider, { OnSlideProps } from "@/components/auto-scroll-slider";
 import ErrorBoundary from "@/lib/sw-toolkit/components/ErrorBoundary";
 import { second } from "@/lib/sw-toolkit/utils/time";
 import api from "@/services/api";
 import { useCallback } from "react";
-import { ItemType } from "./_HeroBanner";
+import { ItemType } from ".";
 
 type ConfigType = Awaited<ReturnType<typeof api.siso.getGalleryConfig>>;
 

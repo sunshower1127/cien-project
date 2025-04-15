@@ -13,7 +13,7 @@ export default function CafeteriaMeal() {
 
   return (
     <Card size="sm" className="h-min">
-      <Card.Data query={query} Component={Content} />
+      <Card.Data key={timeOfDay} query={query} Component={Content} />
     </Card>
   );
 }

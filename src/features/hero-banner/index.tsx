@@ -17,7 +17,7 @@ export default function HeroBanner() {
       <Card.Data
         query={query}
         EmptyComponent={() => <img src={defaultHeroBannerImage} alt="기본 이미지" />}
-        render={(data) => <Content data={data} config={config} />}
+        render={(data) => <Content key={JSON.stringify(data)} data={data} config={config} />}
       />
     </Card>
   );

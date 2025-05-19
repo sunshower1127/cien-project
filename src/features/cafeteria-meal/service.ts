@@ -20,13 +20,13 @@ async function fetchCafeteriaMeal(day: "today" | "tomorrow", mealType: "morning"
   return meals
     .filter(({ menu }) => isNotEmpty(menu?.trim()))
     .map(({ cafeteria, date, mealType, menu, dueTime }) => {
-      const [year, month, day] = date.split(".");
+      const [year, month, day] = date.split("-");
       return {
         cafeteria,
         mealType,
         dueTime,
-        date: `${month}.${day} (${getShortKoreanDayOfWeek(`${year}-${month}-${day}`)})`,
-        menu: menu.split(","),
+        date: `${month}.${day} (${getShortKoreanDayOfWeek(date)})`,
+        menu: menu.split("\n"),
       };
     });
 }
